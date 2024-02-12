@@ -1,4 +1,4 @@
-# Regular-Expression-Parser
+# Regular Expression Parser
 
 ## Environment
 JDK 11, Test code would be run using JUnit 4
