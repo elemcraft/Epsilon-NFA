@@ -62,54 +62,51 @@ public class RegexParser {
             return true;
         }
 
-        boolean inBracket = false;
-
-        // if the regEx starts with an '*' or '+' or '|'
-        if (regEx.charAt(0) == '*' || regEx.charAt(0) == '+' || regEx.charAt(0) == '|')
+        // regEx starts with an '*' or '+' or '|'
+        final char first = regEx.charAt(0);
+        if (first == '*' || first == '+' || first == '|') {
             return false;
+        }
 
-        // if operators are preceded by '('
         for (int i = 1; i < regEx.length(); i++) {
-            if (regEx.charAt(i) == '*' || regEx.charAt(i) == '+' || regEx.charAt(i) == '|') {
-                if (regEx.charAt(i - 1) == '(')
-                    return false;
+            final char curr = regEx.charAt(i);
+            final char prev = regEx.charAt(i - 1);
+
+            // Operators are preceded by '('
+            if ((curr == '*' || curr == '+' || curr == '|') && prev == '(') {
+                return false;
+            }
+
+            // Two consecutive kleene star or kleene plus
+            // Alternation symbol followed by kleene star or kleene plus
+            if ((curr == '*' || curr == '+') && (prev == '*' || prev == '+' || prev == '|')) {
+                return false;
+            }
+
+            // Two consecutive alternation symbol
+            if (curr == '|' && prev == '|') {
+                return false;
             }
         }
 
-        // if kleene star or kleene plus is right after the alternation symbol
-        for (int i = 1; i < regEx.length(); i++) {
-            if (regEx.charAt(i) == '*' || regEx.charAt(i) == '+') {
-                if (regEx.charAt(i - 1) == '|')
-                    return false;
-            }
-        }
-
-        // two consecutive kleene star or kleene plus
-        for (int i = 1; i < regEx.length(); i++) {
-            if (regEx.charAt(i) == '*' || regEx.charAt(i) == '+') {
-                if (regEx.charAt(i - 1) == '*' || regEx.charAt(i - 1) == '+')
-                    return false;
-            }
-        }
-
-        // check for invalid brackets
+        // Invalid brackets
+        Stack<Character> leftBrackets = new Stack<>();
         for (int i = 0; i < regEx.length(); i++) {
-            // invalid brackets
-            if (inBracket == false && regEx.charAt(i) == ')')
-                return false;
-
-            // nested brackets
-            if (inBracket == true && regEx.charAt(i) == '(')
-                return false;
-
-            if (regEx.charAt(i) == '(')
-                inBracket = true;
-            if (regEx.charAt(i) == ')')
-                inBracket = false;
-
-            // if the bracket is not closed at the end
-            if (i == regEx.length() - 1 && inBracket == true)
-                return false;
+            final char curr = regEx.charAt(i);
+            if(curr == '(') {
+                leftBrackets.push(curr);
+            } else if(curr == ')') {
+                // Unclosed right brackets
+                if(leftBrackets.isEmpty()) {
+                    return false;
+                }
+                leftBrackets.pop();
+            }
+        }
+        
+        // Unclosed left brackets
+        if(!leftBrackets.isEmpty()) {
+            return false;
         }
 
         return true;
