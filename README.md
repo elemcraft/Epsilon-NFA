@@ -8,7 +8,7 @@ JDK 11, Test code would be run using JUnit 4
 * Run with: `java RegexEngine`
 * Run with verbose mode: `java RegexEngine -v`
 
-## Concept
+## Code Outline
 1. Read in the regular expression
 2. Check for validity of the input regex
 3. Transform the regex into postfix
