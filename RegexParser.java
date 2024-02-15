@@ -16,6 +16,11 @@ public class RegexParser {
         machine = null;
     }
 
+    // Getter for nfa machine
+    public NFA getNFA() {
+        return machine;
+    }
+
     // Behaves like setter for the "machine" field
     public void initializeNFA() {
         machine = NFA.buildMachine(regEx);
@@ -214,10 +219,6 @@ public class RegexParser {
         List<Character> res = new ArrayList<>(symbols);
         Collections.sort(res);
         return res;
-    }
-
-    public boolean match(String input) {
-        return machine.match(input);
     }
 
     public boolean matchInputVerbose(NFA machine, String input) {
