@@ -5,8 +5,8 @@ public class RegexParser {
      * Only need to create a Scanner that's tied to System.in one time
      * and use it for all console input.
      */
-    private static final Scanner userInput = new Scanner(System.in);
-    public String regEx;
+    private final Scanner userInput = new Scanner(System.in);
+    private String regEx;
     public List<State> currentStates;
 
     RegexParser() {
@@ -15,13 +15,13 @@ public class RegexParser {
     }
 
     // Behaves like setter for the "regEx" field
-    private void readRegEx() {
+    public void readRegEx() throws IllegalArgumentException {
         String regEx = userInput.nextLine();
 
-        // Invalid regEx would print Error and exit with code 1
+        // Invalid regEx would print an error message and throw an exception
         if (isValid(regEx) == false) {
-            System.out.println("Error");
-            System.exit(1);
+            System.out.println("Invalid regular expression");
+            throw new IllegalArgumentException();
         }
 
         // Transform the regular expression to postfix
@@ -62,9 +62,15 @@ public class RegexParser {
             return true;
         }
 
-        // regEx starts with an '*' or '+' or '|'
+        // Starts with an operator
         final char first = regEx.charAt(0);
         if (first == '*' || first == '+' || first == '|') {
+            return false;
+        }
+
+        // Ends with alternation
+        final char last = regEx.charAt(regEx.length() - 1);
+        if(last == '|') {
             return false;
         }
 
@@ -78,13 +84,18 @@ public class RegexParser {
             }
 
             // Two consecutive kleene star or kleene plus
-            // Alternation symbol followed by kleene star or kleene plus
-            if ((curr == '*' || curr == '+') && (prev == '*' || prev == '+' || prev == '|')) {
+            
+            if ((curr == '*' || curr == '+') && (prev == '*' || prev == '+')) {
                 return false;
             }
 
             // Two consecutive alternation symbol
             if (curr == '|' && prev == '|') {
+                return false;
+            }
+
+            // Alternation followed by kleene star, kleene plus, or right bracket
+            if(prev == '|' && (curr == ')' || curr == '*' || curr == '+')) {
                 return false;
             }
         }
@@ -243,7 +254,7 @@ public class RegexParser {
             System.out.println(State.isAcceptable(regexEngine.currentStates));
 
             while (true) {
-                String input = userInput.nextLine();
+                String input = regexEngine.userInput.nextLine();
                 if (input.length() == 0) {
                     System.out.println(State.isAcceptable(regexEngine.currentStates));
                     continue;
@@ -261,7 +272,7 @@ public class RegexParser {
 
             // Repeatly checking input
             while (true) {
-                String input = userInput.nextLine();
+                String input = regexEngine.userInput.nextLine();
                 boolean result = NFA.match(machine, input);
                 System.out.println(result);
             }
