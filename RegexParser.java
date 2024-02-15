@@ -43,21 +43,6 @@ public class RegexParser {
         this.regEx = regEx;
     }
 
-    // overload this function for testing
-    public boolean readRegEx(String regEx) {
-        // invalid regualr expression
-        if (isValid(regEx) == false) {
-            return false;
-        }
-
-        // parse regular expression
-        regEx = insertConcatOperator(regEx);
-        regEx = toPostfix(regEx);
-
-        this.regEx = regEx;
-        return true;
-    }
-
     /*
      * a regular expression can consist of
      * lower and upper case letters,
