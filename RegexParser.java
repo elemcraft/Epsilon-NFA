@@ -70,7 +70,7 @@ public class RegexParser {
 
         // Ends with alternation
         final char last = regEx.charAt(regEx.length() - 1);
-        if(last == '|') {
+        if (last == '|') {
             return false;
         }
 
@@ -84,7 +84,7 @@ public class RegexParser {
             }
 
             // Two consecutive kleene star or kleene plus
-            
+
             if ((curr == '*' || curr == '+') && (prev == '*' || prev == '+')) {
                 return false;
             }
@@ -95,7 +95,7 @@ public class RegexParser {
             }
 
             // Alternation followed by kleene star, kleene plus, or right bracket
-            if(prev == '|' && (curr == ')' || curr == '*' || curr == '+')) {
+            if (prev == '|' && (curr == ')' || curr == '*' || curr == '+')) {
                 return false;
             }
         }
@@ -209,7 +209,7 @@ public class RegexParser {
         return res;
     }
 
-    public boolean matchInput(String input) {
+    public boolean match(String input) {
         NFA machine = NFA.buildMachine(regEx);
         return NFA.match(machine, input);
     }
@@ -218,13 +218,14 @@ public class RegexParser {
         // if(currentStates.size() == 0) currentStates.add(machine.start);
         NFA.getEpsilonClosure(currentStates);
 
-        if (input.length() == 0)
-            return State.isAcceptable(currentStates);
+        if (input.length() == 0) {
+            // return State.isAcceptable(currentStates);
+        }
 
         List<State> nextStates = NFA.match(machine, input.charAt(0), currentStates);
         currentStates = nextStates;
 
-        return State.isAcceptable(currentStates);
+        return false; // State.isAcceptable(currentStates);
     }
 
     public void reset() {
@@ -232,47 +233,45 @@ public class RegexParser {
     }
 
     public static void main(String[] args) {
-        RegexParser regexEngine = new RegexParser();
+        RegexParser parser = new RegexParser();
 
         // read in an regular expression
-        regexEngine.readRegEx();
+        parser.readRegEx();
 
         // verbose mode or normal mode
         if (args.length > 0 && args[0].equals("-v")) // verbose mode
         {
             // build verbose mode state machine
-            NFA machine = NFA.buildVerboseMachine(regexEngine.regEx);
+            NFA machine = NFA.buildVerboseMachine(parser.regEx);
 
-            List<Character> symbols = getRegexSymbols(regexEngine.regEx);
+            List<Character> symbols = getRegexSymbols(parser.regEx);
             machine.printTransitionTable(symbols);
 
             System.out.println("Ready");
 
             // Repeatly checking input(letter by letter)
-            regexEngine.currentStates.add(machine.start);
-            NFA.getEpsilonClosure(regexEngine.currentStates);
-            System.out.println(State.isAcceptable(regexEngine.currentStates));
+            parser.currentStates.add(machine.start);
+            NFA.getEpsilonClosure(parser.currentStates);
+            // System.out.println(State.isAcceptable(parser.currentStates));
 
             while (true) {
-                String input = regexEngine.userInput.nextLine();
+                String input = parser.userInput.nextLine();
                 if (input.length() == 0) {
-                    System.out.println(State.isAcceptable(regexEngine.currentStates));
+                    // System.out.println(State.isAcceptable(parser.currentStates));
                     continue;
                 }
                 char symbol = input.charAt(0);
-                List<State> nextStates = NFA.match(machine, symbol, regexEngine.currentStates);
-                System.out.println(State.isAcceptable(nextStates));
-                regexEngine.currentStates = nextStates;
+                List<State> nextStates = NFA.match(machine, symbol, parser.currentStates);
+                // System.out.println(State.isAcceptable(nextStates));
+                parser.currentStates = nextStates;
             }
         } else { // normal mode
-            // build state machine
-            NFA machine = NFA.buildMachine(regexEngine.regEx);
-
+            NFA machine = NFA.buildMachine(parser.regEx);
             System.out.println("Ready");
 
             // Repeatly checking input
             while (true) {
-                String input = regexEngine.userInput.nextLine();
+                String input = parser.userInput.nextLine();
                 boolean result = NFA.match(machine, input);
                 System.out.println(result);
             }
