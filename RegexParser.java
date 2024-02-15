@@ -90,22 +90,21 @@ public class RegexParser {
         }
 
         // Invalid brackets
-        Stack<Character> leftBrackets = new Stack<>();
+        int hanging = 0; // The number of unclosed left brackets
         for (int i = 0; i < regEx.length(); i++) {
             final char curr = regEx.charAt(i);
             if(curr == '(') {
-                leftBrackets.push(curr);
+                hanging++;
             } else if(curr == ')') {
-                // Unclosed right brackets
-                if(leftBrackets.isEmpty()) {
+                if(hanging == 0) { // Unclosed right brackets
                     return false;
                 }
-                leftBrackets.pop();
+                hanging--;
             }
         }
         
         // Unclosed left brackets
-        if(!leftBrackets.isEmpty()) {
+        if(hanging != 0) {
             return false;
         }
 
@@ -117,7 +116,7 @@ public class RegexParser {
         String output = new String();
 
         for (int i = 0; i < regex.length(); i++) {
-            char curr = regex.charAt(i);
+            final char curr = regex.charAt(i);
             output += curr;
 
             if (curr == '(' || curr == '|') {
@@ -125,7 +124,7 @@ public class RegexParser {
             }
 
             if (i < regex.length() - 1) {
-                char next = regex.charAt(i + 1);
+                final char next = regex.charAt(i + 1);
 
                 if (next == '*' || next == '+' || next == '|' || next == ')') {
                     continue;
@@ -134,11 +133,11 @@ public class RegexParser {
                 output += '.';
             }
         }
-
+        
         return output;
     }
 
-    // convert regular expression from infix to postfix
+    // Convert regular expression from infix to postfix
     private static String toPostfix(String exp) {
         // the precedence of operators
         HashMap<Character, Integer> opPrecedence = new HashMap<Character, Integer>();
