@@ -8,10 +8,17 @@ public class RegexParser {
     private final Scanner userInput = new Scanner(System.in);
     private String regEx;
     public List<State> currentStates;
+    private NFA machine;
 
     RegexParser() {
         regEx = new String();
         currentStates = new ArrayList<State>();
+        machine = null;
+    }
+
+    // Behaves like setter for the "machine" field
+    public void initializeNFA() {
+        machine = NFA.buildMachine(regEx);
     }
 
     // Behaves like setter for the "regEx" field
@@ -210,8 +217,7 @@ public class RegexParser {
     }
 
     public boolean match(String input) {
-        NFA machine = NFA.buildMachine(regEx);
-        return NFA.match(machine, input);
+        return machine.match(input);
     }
 
     public boolean matchInputVerbose(NFA machine, String input) {
@@ -266,13 +272,13 @@ public class RegexParser {
                 parser.currentStates = nextStates;
             }
         } else { // normal mode
-            NFA machine = NFA.buildMachine(parser.regEx);
+            parser.initializeNFA();
             System.out.println("Ready");
 
             // Repeatly checking input
             while (true) {
                 String input = parser.userInput.nextLine();
-                boolean result = NFA.match(machine, input);
+                boolean result = parser.machine.match(input);
                 System.out.println(result);
             }
         }

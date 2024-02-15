@@ -1,5 +1,4 @@
 import java.io.ByteArrayInputStream;
-
 import org.junit.*;
 
 public class RegexParser_Test {
@@ -14,6 +13,7 @@ public class RegexParser_Test {
         setUserInput("ko;2 q46");
         RegexParser parser = new RegexParser();
         parser.readRegEx();
+        parser.initializeNFA();
         boolean output = parser.match("ko;2 q46");
         boolean output1 = parser.match("ko;2q46");
         boolean output2 = parser.match("ko2 q46");
@@ -29,6 +29,7 @@ public class RegexParser_Test {
         setUserInput("jsh*fq");
         RegexParser parser = new RegexParser();
         parser.readRegEx();
+        parser.initializeNFA();
         boolean output1 = parser.match("jsh*fq");
         boolean output2 = parser.match("jsfq");
         boolean output3 = parser.match("jshfq");
@@ -44,6 +45,7 @@ public class RegexParser_Test {
         setUserInput("jsh+fq");
         RegexParser parser = new RegexParser();
         parser.readRegEx();
+        parser.initializeNFA();
         boolean output1 = parser.match("jsfq");
         boolean output2 = parser.match("jshfq");
         boolean output3 = parser.match("jshhhhhfq");
@@ -57,6 +59,7 @@ public class RegexParser_Test {
         setUserInput("kofw|ew");
         RegexParser parser = new RegexParser();
         parser.readRegEx();
+        parser.initializeNFA();
         boolean output1 = parser.match("kofw");
         boolean output2 = parser.match("ew");
         boolean output3 = parser.match("kofwew");
@@ -72,6 +75,7 @@ public class RegexParser_Test {
         setUserInput("(sbv)oi15");
         RegexParser parser = new RegexParser();
         parser.readRegEx();
+        parser.initializeNFA();
         boolean output1 = parser.match("(sbv)oi15");
         boolean output2 = parser.match("sbvoi15");
         boolean output3 = parser.match("");
@@ -85,6 +89,7 @@ public class RegexParser_Test {
         setUserInput("62*ewqr*fs");
         RegexParser parser = new RegexParser();
         parser.readRegEx();
+        parser.initializeNFA();
         boolean output1 = parser.match("62ewqr*fs");
         boolean output2 = parser.match("62*ewqrfs");
         boolean output3 = parser.match("6ewqfs");
@@ -100,6 +105,7 @@ public class RegexParser_Test {
         setUserInput("gq;+mi29+wnr");
         RegexParser parser = new RegexParser();
         parser.readRegEx();
+        parser.initializeNFA();
         boolean output1 = parser.match("gq;mi29+wnr");
         boolean output2 = parser.match("gq;+mi29wnr");
         boolean output3 = parser.match("gqmi29wnr");
@@ -117,6 +123,7 @@ public class RegexParser_Test {
         setUserInput("vqr|89r|bj,");
         RegexParser parser = new RegexParser();
         parser.readRegEx();
+        parser.initializeNFA();
         boolean output1 = parser.match("vqr|89r|bj,");
         boolean output2 = parser.match("vqr");
         boolean output3 = parser.match("89r");
@@ -134,6 +141,7 @@ public class RegexParser_Test {
         setUserInput("(,rukw35)gtr(ehrw;[])");
         RegexParser parser = new RegexParser();
         parser.readRegEx();
+        parser.initializeNFA();
         boolean output1 = parser.match("(,rukw35)gtr(ehrw;[])");
         boolean output2 = parser.match("(,rukw35)gtrehrw;[]");
         boolean output3 = parser.match(",rukw35gtr(ehrw;[])");
@@ -149,6 +157,7 @@ public class RegexParser_Test {
         setUserInput("tq4(jpl5'7)*vr3");
         RegexParser parser = new RegexParser();
         parser.readRegEx();
+        parser.initializeNFA();
         boolean output1 = parser.match("tq4(jpl5'7)*vr3");
         boolean output2 = parser.match("tq4jpl5'7*vr3");
         boolean output3 = parser.match("tq4vr3");
@@ -166,6 +175,7 @@ public class RegexParser_Test {
         setUserInput("oq(ij2;_)+24");
         RegexParser parser = new RegexParser();
         parser.readRegEx();
+        parser.initializeNFA();
         boolean output1 = parser.match("oq(ij2;_)+24");
         boolean output2 = parser.match("oqij2;_+24");
         boolean output3 = parser.match("oq(ij2;_)24");
@@ -185,6 +195,7 @@ public class RegexParser_Test {
         setUserInput("t(gt4w|ok)two");
         RegexParser parser = new RegexParser();
         parser.readRegEx();
+        parser.initializeNFA();
         boolean output1 = parser.match("t(gt4w|ok)two");
         boolean output2 = parser.match("tgt4w|oktwo");
         boolean output3 = parser.match("t(gt4wok)two");
@@ -206,6 +217,7 @@ public class RegexParser_Test {
         setUserInput("qh+3|gw*");
         RegexParser parser = new RegexParser();
         parser.readRegEx();
+        parser.initializeNFA();
         boolean output1 = parser.match("qh+3|gw*");
         boolean output2 = parser.match("qh+3gw*");
         boolean output3 = parser.match("qh3|gw*");
@@ -239,6 +251,7 @@ public class RegexParser_Test {
         setUserInput("(h*|p)(h|d)");
         RegexParser parser = new RegexParser();
         parser.readRegEx();
+        parser.initializeNFA();
         boolean output1 = parser.match("(h*|p)(h|d)");
         boolean output2 = parser.match("");
         boolean output3 = parser.match("d");
@@ -264,45 +277,45 @@ public class RegexParser_Test {
         setUserInput("(t*|f)*r*(k|y)*");
         RegexParser parser = new RegexParser();
         parser.readRegEx();
-        boolean output10 = parser.match("(t*|f)+r(k|y)");
-        boolean output11 = parser.match("");
-        boolean output12 = parser.match("ttt");
-        boolean output13 = parser.match("fffff");
-        boolean output14 = parser.match("tff");
-        boolean output15 = parser.match("rrr");
-        boolean output16 = parser.match("kkkk");
-        boolean output17 = parser.match("yy");
-        boolean output18 = parser.match("ty");
-        boolean output19 = parser.match("try");
-        boolean output20 = parser.match("rrry");
-        boolean output21 = parser.match("fry");
-        boolean output22 = parser.match("rk");
-        boolean output23 = parser.match("trk");
-        boolean output24 = parser.match("tk");
-        boolean output25 = parser.match("ky");
-        Assert.assertEquals(output10, false);
+        parser.initializeNFA();
+        boolean output = parser.match("(t*|f)+r(k|y)");
+        boolean output1 = parser.match("");
+        boolean output2 = parser.match("ttt");
+        boolean output3 = parser.match("fffff");
+        boolean output4 = parser.match("tff");
+        boolean output5 = parser.match("rrr");
+        boolean output6 = parser.match("kkkk");
+        boolean output7 = parser.match("yy");
+        boolean output8 = parser.match("ty");
+        boolean output9 = parser.match("try");
+        boolean output10 = parser.match("rrry");
+        boolean output11 = parser.match("fry");
+        boolean output12 = parser.match("rk");
+        boolean output13 = parser.match("trk");
+        boolean output14 = parser.match("tk");
+        boolean output15 = parser.match("ky");
+        Assert.assertEquals(output, false);
+        Assert.assertEquals(output1, true);
+        Assert.assertEquals(output2, true);
+        Assert.assertEquals(output3, true);
+        Assert.assertEquals(output4, true);
+        Assert.assertEquals(output5, true);
+        Assert.assertEquals(output6, true);
+        Assert.assertEquals(output7, true);
+        Assert.assertEquals(output8, true);
+        Assert.assertEquals(output9, true);
+        Assert.assertEquals(output10, true);
         Assert.assertEquals(output11, true);
         Assert.assertEquals(output12, true);
         Assert.assertEquals(output13, true);
         Assert.assertEquals(output14, true);
         Assert.assertEquals(output15, true);
-        Assert.assertEquals(output16, true);
-        Assert.assertEquals(output17, true);
-        Assert.assertEquals(output18, true);
-        Assert.assertEquals(output19, true);
-        Assert.assertEquals(output20, true);
-        Assert.assertEquals(output21, true);
-        Assert.assertEquals(output22, true);
-        Assert.assertEquals(output23, true);
-        Assert.assertEquals(output24, true);
-        Assert.assertEquals(output25, true);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void startWithKleenePlus() {
         setUserInput("+a");
         RegexParser parser = new RegexParser();
-        parser.readRegEx();
         parser.readRegEx();
     }
 
