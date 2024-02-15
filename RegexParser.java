@@ -93,18 +93,18 @@ public class RegexParser {
         int hanging = 0; // The number of unclosed left brackets
         for (int i = 0; i < regEx.length(); i++) {
             final char curr = regEx.charAt(i);
-            if(curr == '(') {
+            if (curr == '(') {
                 hanging++;
-            } else if(curr == ')') {
-                if(hanging == 0) { // Unclosed right brackets
+            } else if (curr == ')') {
+                if (hanging == 0) { // Unclosed right brackets
                     return false;
                 }
                 hanging--;
             }
         }
-        
+
         // Unclosed left brackets
-        if(hanging != 0) {
+        if (hanging != 0) {
             return false;
         }
 
@@ -133,72 +133,69 @@ public class RegexParser {
                 output += '.';
             }
         }
-        
+
         return output;
     }
 
     // Convert regular expression from infix to postfix
     private static String toPostfix(String exp) {
         // the precedence of operators
-        HashMap<Character, Integer> opPrecedence = new HashMap<Character, Integer>();
-        opPrecedence.put('|', 0);
-        opPrecedence.put('.', 1);
-        opPrecedence.put('?', 2);
-        opPrecedence.put('*', 2);
-        opPrecedence.put('+', 2);
+        Map<Character, Integer> pre = new HashMap<>();
+        pre.put('|', 0);
+        pre.put('.', 1);
+        pre.put('*', 2);
+        pre.put('+', 2);
 
         String output = new String();
 
         // stack that contains operators
-        Stack<Character> opStack = new Stack<Character>();
+        Stack<Character> oper = new Stack<>();
 
-        for (int i = 0; i < exp.length(); i++) {
-            char token = exp.charAt(i);
-            // if the current character is an operator
-            if (token == '.' || token == '|' || token == '*' || token == '?' || token == '+') {
-                while (opStack.size() != 0 && opStack.peek() != '('
-                        && opPrecedence.get(opStack.peek()) >= opPrecedence.get(token)) {
-                    output += opStack.pop();
+        for (char curr : exp.toCharArray()) {
+            if (curr == '.' || curr == '|' || curr == '*' || curr == '+') {
+                // Current character is an operator
+
+                while (!oper.isEmpty() && oper.peek() != '('
+                        && pre.get(oper.peek()) >= pre.get(curr)) {
+                    output += oper.pop();
                 }
 
-                opStack.push(token);
-            }
-            // if the current character is a bracket
-            else if (token == '(' || token == ')') {
-                if (token == '(') {
-                    opStack.push(token);
+                oper.push(curr);
+            } else if (curr == '(' || curr == ')') {
+                // Current character is a bracket
+
+                if (curr == '(') {
+                    oper.push(curr);
                 } else {
-                    while (opStack.peek() != '(') {
-                        output += opStack.pop();
+                    while (oper.peek() != '(') {
+                        output += oper.pop();
                     }
-                    opStack.pop();
+                    oper.pop();
                 }
             } else {
-                output += token;
+                output += curr;
             }
         }
 
-        while (opStack.size() > 0) {
-            output += opStack.pop();
+        while (oper.size() > 0) {
+            output += oper.pop();
         }
 
         return output;
     }
 
     private static List<Character> getRegexSymbols(String exp) {
-        ArrayList<Character> symbols = new ArrayList<Character>();
-        for (int i = 0; i < exp.length(); i++) {
-            /*
-             * if the character is not an operator and a new one
-             * add to the symbol list
-             */
-            char symbol = exp.charAt(i);
-            if (symbol != '|' && symbol != '*' && symbol != '+' && symbol != '.' && !symbols.contains(symbol)) {
-                symbols.add(symbol);
+        Set<Character> symbols = new HashSet<>();
+        for (char curr : exp.toCharArray()) {
+            // Add curr character to the symbols set if it is not an operator
+            if (curr != '|' && curr != '*' && curr != '+' && curr != '.') {
+                symbols.add(curr);
             }
         }
-        Collections.sort(symbols);
-        return symbols;
+
+        List<Character> res = new ArrayList<>(symbols);
+        Collections.sort(res);
+        return res;
     }
 
     public boolean matchInput(String input) {
@@ -256,8 +253,7 @@ public class RegexParser {
                 System.out.println(State.isAcceptable(nextStates));
                 regexEngine.currentStates = nextStates;
             }
-        } else // normal mode
-        {
+        } else { // normal mode
             // build state machine
             NFA machine = NFA.buildMachine(regexEngine.regEx);
 
