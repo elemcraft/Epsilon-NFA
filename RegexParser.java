@@ -222,19 +222,19 @@ public class RegexParser {
             parser.nfa.printTransitionTable(symbols);
 
             System.out.println("Ready");
-            System.out.println(State.isAcceptable(parser.nfa.current));
+            System.out.println(parser.nfa.accepting());
 
             // Repeatly checking input character by character
             while (true) {
                 String input = parser.userInput.nextLine();
                 if (input.length() == 0) {
-                    System.out.println(State.isAcceptable(parser.nfa.current));
+                    System.out.println(parser.nfa.accepting());
                     continue;
                 }
 
                 char symbol = input.charAt(0);
                 parser.nfa.matchSymbol(symbol);
-                System.out.println(State.isAcceptable(parser.nfa.current));
+                System.out.println(parser.nfa.accepting());
             }
         } else { // normal mode
             parser.buildNFA();

@@ -146,6 +146,7 @@ public class NFA {
     }
 
     // Depth first search from current state to get the epsilon closure
+    // Helper method for getEpClosure()
     private static void dfs(State curr, Set<State> visited) {
         if (visited.contains(curr)) {
             return;
@@ -166,7 +167,7 @@ public class NFA {
             matchSymbol(symbol);
         }
 
-        return State.isAcceptable(current);
+        return accepting();
     }
 
     // Update the current states for the input symbol
@@ -183,11 +184,17 @@ public class NFA {
         current = getEpClosure(next);
     }
 
+    // Check if current states are accepting states
+    public boolean accepting() {
+        return current.contains(end);
+    }
+
     public int labelStates() {
         label(start);
         return count;
     }
-
+    
+    // Helper method for labelStates()
     private void label(State curr) {
         // Check if the current state has been visited
         if (curr == null || states.contains(curr)) {

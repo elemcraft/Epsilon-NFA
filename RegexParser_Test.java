@@ -461,14 +461,14 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         for (int i = 0; i < 9; i++) {
             parser.getNFA().matchSymbol((char) (i + '0'));
-            Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+            Assert.assertEquals(parser.getNFA().accepting(), false);
         }
         parser.getNFA().matchSymbol('9');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), true);
+        Assert.assertEquals(parser.getNFA().accepting(), true);
     }
 
     @Test
@@ -478,14 +478,14 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         for (int i = 0; i < 25; i++) {
             parser.getNFA().matchSymbol((char) (i + 'a'));
-            Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+            Assert.assertEquals(parser.getNFA().accepting(), false);
         }
         parser.getNFA().matchSymbol('z');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), true);
+        Assert.assertEquals(parser.getNFA().accepting(), true);
     }
 
     @Test
@@ -495,11 +495,11 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), true);
+        Assert.assertEquals(parser.getNFA().accepting(), true);
 
         for (int i = 0; i < 100; i++) {
             parser.getNFA().matchSymbol('k');
-            Assert.assertEquals(State.isAcceptable(parser.getNFA().current), true);
+            Assert.assertEquals(parser.getNFA().accepting(), true);
         }
     }
 
@@ -510,14 +510,14 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('a');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), true);
+        Assert.assertEquals(parser.getNFA().accepting(), true);
 
         for (int i = 0; i < 100; i++) {
             parser.getNFA().matchSymbol('b');
-            Assert.assertEquals(State.isAcceptable(parser.getNFA().current), true);
+            Assert.assertEquals(parser.getNFA().accepting(), true);
         }
     }
 
@@ -528,11 +528,11 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         for (int i = 0; i < 100; i++) {
             parser.getNFA().matchSymbol('k');
-            Assert.assertEquals(State.isAcceptable(parser.getNFA().current), true);
+            Assert.assertEquals(parser.getNFA().accepting(), true);
         }
     }
 
@@ -543,14 +543,14 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('f');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         for (int i = 0; i < 100; i++) {
             parser.getNFA().matchSymbol('h');
-            Assert.assertEquals(State.isAcceptable(parser.getNFA().current), true);
+            Assert.assertEquals(parser.getNFA().accepting(), true);
         }
     }
 
@@ -561,13 +561,13 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('a');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('b');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), true);
+        Assert.assertEquals(parser.getNFA().accepting(), true);
     }
 
     @Test
@@ -577,13 +577,13 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('d');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('c');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), true);
+        Assert.assertEquals(parser.getNFA().accepting(), true);
     }
 
     @Test
@@ -593,19 +593,19 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('a');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('b');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('c');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), true);
+        Assert.assertEquals(parser.getNFA().accepting(), true);
 
         parser.getNFA().matchSymbol('a');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
     }
 
     @Test
@@ -615,25 +615,25 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('s');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
         
         parser.getNFA().matchSymbol('8');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), true);
+        Assert.assertEquals(parser.getNFA().accepting(), true);
 
         parser.getNFA().matchSymbol('w');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('r');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), true);
+        Assert.assertEquals(parser.getNFA().accepting(), true);
 
         parser.getNFA().matchSymbol('w');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('r');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), true);
+        Assert.assertEquals(parser.getNFA().accepting(), true);
     }
 
     @Test
@@ -643,22 +643,22 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('s');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('d');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('d');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('d');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
         
         parser.getNFA().matchSymbol('8');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), true);
+        Assert.assertEquals(parser.getNFA().accepting(), true);
     }
 
     @Test
@@ -668,31 +668,31 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('s');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('c');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('c');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
         
         parser.getNFA().matchSymbol('8');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), true);
+        Assert.assertEquals(parser.getNFA().accepting(), true);
 
         parser.getNFA().matchSymbol('w');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('r');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), true);
+        Assert.assertEquals(parser.getNFA().accepting(), true);
 
         parser.getNFA().matchSymbol('w');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('r');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), true);
+        Assert.assertEquals(parser.getNFA().accepting(), true);
     }
 
     @Test
@@ -700,18 +700,18 @@ public class RegexParser_Test {
         RegexParser parser = new RegexParser();
         parser.buildNFA();
 
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), true);
+        Assert.assertEquals(parser.getNFA().accepting(), true);
 
         parser.getNFA().matchSymbol(' ');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol(' ');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('a');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
 
         parser.getNFA().matchSymbol('b');
-        Assert.assertEquals(State.isAcceptable(parser.getNFA().current), false);
+        Assert.assertEquals(parser.getNFA().accepting(), false);
     }
 }
