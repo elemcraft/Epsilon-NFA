@@ -25,6 +25,22 @@ public class RegexParser_Test {
     }
 
     @Test
+    public void emptyString() {
+        RegexParser parser = new RegexParser();
+        parser.initializeNFA();
+        boolean output1 = parser.getNFA().match("");
+        boolean output2 = parser.getNFA().match("a");
+        boolean output3 = parser.getNFA().match("*");
+        boolean output4 = parser.getNFA().match("|");
+        boolean output5 = parser.getNFA().match("+");
+        Assert.assertEquals(output1, true);
+        Assert.assertEquals(output2, false);
+        Assert.assertEquals(output3, false);
+        Assert.assertEquals(output4, false);
+        Assert.assertEquals(output5, false);
+    }
+
+    @Test
     public void singleKleeneStar() {
         setUserInput("jsh*fq");
         RegexParser parser = new RegexParser();
