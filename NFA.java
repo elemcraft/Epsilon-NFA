@@ -124,11 +124,11 @@ public class NFA {
     }
 
     // Get the epsilon closure of the input state set
-    public static Set<State> getEpClosure(Set<State> stateSet) {
+    public static Set<State> getEpClosure(Set<State> states) {
         Set<State> epClosure = new HashSet<>();
 
         // Perform dfs from every state in the current state set
-        for (State state : stateSet) {
+        for (State state : states) {
             dfs(state, epClosure);
         }
 
@@ -148,6 +148,26 @@ public class NFA {
         }
     }
 
+    // Traverse the nfa to see if the input word matches the regular expression
+    public boolean match(String word) {
+        Set<State> current = new HashSet<>();
+        current.add(start);
+        current = getEpClosure(current);
+
+        for (char symbol : word.toCharArray()) {
+            Set<State> next = new HashSet<>();
+            for (State state : current) {
+                State neighbor = state.to.get(symbol);
+                if (neighbor != null) {
+                    next.add(neighbor);
+                }
+            }
+            current = getEpClosure(next);
+        }
+
+        return State.isAcceptable(current);
+    }
+
     // Overload match method for verbose mode
     // to check the input character by character
     public static Set<State> match(NFA nfa, char symbol, Set<State> current) {
@@ -161,51 +181,6 @@ public class NFA {
         }
 
         return getEpClosure(nextStates);
-    }
-
-    /*
-     * There are only two types of states in Thompson's model
-     * 1. states with 1 or 2 ε-transitions
-     * 2. states with only one transition on a symbol
-     * 
-     * recursively go to the next states
-     * until it requires a symbol instead of epsilon to go to the next state
-     */
-    /*
-     * kind of like epsilon closure,
-     * but nextStates only contains fringe states of epsilon closure
-     */
-    private static void addNextState(State state, Set<State> next, Set<State> visited) {
-        if (state.epsilonTo.size() > 0) {
-            for (State st : state.epsilonTo) {
-                if (!visited.contains(st)) {
-                    visited.add(st);
-                    addNextState(st, next, visited);
-                }
-            }
-        } else {
-            next.add(state);
-        }
-    }
-
-    // Traverse the nfa to see if the input word matches the regular expression
-    public boolean match(String word) {
-        Set<State> current = new HashSet<>();
-        addNextState(start, current, new HashSet<>());
-
-        for (char symbol : word.toCharArray()) {
-            Set<State> next = new HashSet<>();
-
-            for (State state : current) {
-                State neighbor = state.to.get(symbol);
-                if (neighbor != null) {
-                    addNextState(neighbor, next, new HashSet<>());
-                }
-            }
-            current = next;
-        }
-
-        return State.isAcceptable(current);
     }
 
     public int labelStates() {
