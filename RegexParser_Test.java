@@ -1,5 +1,4 @@
 import java.io.ByteArrayInputStream;
-import java.util.Set;
 import org.junit.*;
 
 public class RegexParser_Test {
@@ -468,12 +467,10 @@ public class RegexParser_Test {
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
         for (int i = 0; i < 9; i++) {
-            Set<State> next = NFA.match(parser.getNFA(), (char) (i + '0'), parser.current);
-            parser.current = NFA.getEpClosure(next);
+            parser.current = NFA.match(parser.getNFA(), (char) (i + '0'), parser.current);
             Assert.assertEquals(State.isAcceptable(parser.current), false);
         }
-        Set<State> next = NFA.match(parser.getNFA(), '9', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), '9', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), true);
     }
 
@@ -490,12 +487,10 @@ public class RegexParser_Test {
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
         for (int i = 0; i < 25; i++) {
-            Set<State> next = NFA.match(parser.getNFA(), (char) (i + 'a'), parser.current);
-            parser.current = NFA.getEpClosure(next);
+            parser.current = NFA.match(parser.getNFA(), (char) (i + 'a'), parser.current);
             Assert.assertEquals(State.isAcceptable(parser.current), false);
         }
-        Set<State> next = NFA.match(parser.getNFA(), 'z', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'z', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), true);
     }
 
@@ -512,8 +507,7 @@ public class RegexParser_Test {
         Assert.assertEquals(State.isAcceptable(parser.current), true);
 
         for (int i = 0; i < 100; i++) {
-            Set<State> next = NFA.match(parser.getNFA(), 'k', parser.current);
-            parser.current = NFA.getEpClosure(next);
+            parser.current = NFA.match(parser.getNFA(), 'k', parser.current);
             Assert.assertEquals(State.isAcceptable(parser.current), true);
         }
     }
@@ -530,13 +524,11 @@ public class RegexParser_Test {
         parser.current = NFA.getEpClosure(parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        Set<State> next = NFA.match(parser.getNFA(), 'a', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'a', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), true);
 
         for (int i = 0; i < 100; i++) {
-            next = NFA.match(parser.getNFA(), 'b', parser.current);
-            parser.current = NFA.getEpClosure(next);
+            parser.current = NFA.match(parser.getNFA(), 'b', parser.current);
             Assert.assertEquals(State.isAcceptable(parser.current), true);
         }
     }
@@ -554,8 +546,7 @@ public class RegexParser_Test {
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
         for (int i = 0; i < 100; i++) {
-            Set<State> next = NFA.match(parser.getNFA(), 'k', parser.current);
-            parser.current = NFA.getEpClosure(next);
+            parser.current = NFA.match(parser.getNFA(), 'k', parser.current);
             Assert.assertEquals(State.isAcceptable(parser.current), true);
         }
     }
@@ -572,13 +563,11 @@ public class RegexParser_Test {
         parser.current = NFA.getEpClosure(parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        Set<State> next = NFA.match(parser.getNFA(), 'f', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'f', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
         for (int i = 0; i < 100; i++) {
-            next = NFA.match(parser.getNFA(), 'h', parser.current);
-            parser.current = NFA.getEpClosure(next);
+            parser.current = NFA.match(parser.getNFA(), 'h', parser.current);
             Assert.assertEquals(State.isAcceptable(parser.current), true);
         }
     }
@@ -595,12 +584,10 @@ public class RegexParser_Test {
         parser.current = NFA.getEpClosure(parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        Set<State> next = NFA.match(parser.getNFA(), 'a', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'a', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        next = NFA.match(parser.getNFA(), 'b', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'b', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), true);
     }
 
@@ -616,12 +603,10 @@ public class RegexParser_Test {
         parser.current = NFA.getEpClosure(parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        Set<State> next = NFA.match(parser.getNFA(), 'd', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'd', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        next = NFA.match(parser.getNFA(), 'c', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'c', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), true);
     }
 
@@ -636,20 +621,16 @@ public class RegexParser_Test {
         parser.current = NFA.getEpClosure(parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        Set<State> next = NFA.match(parser.getNFA(), 'a', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'a', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        next = NFA.match(parser.getNFA(), 'b', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'b', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        next = NFA.match(parser.getNFA(), 'c', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'c', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), true);
 
-        next = NFA.match(parser.getNFA(), 'a', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'a', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
     }
 
@@ -664,28 +645,22 @@ public class RegexParser_Test {
         parser.current = NFA.getEpClosure(parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        Set<State> next = NFA.match(parser.getNFA(), 's', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 's', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
         
-        next = NFA.match(parser.getNFA(), '8', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), '8', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), true);
 
-        next = NFA.match(parser.getNFA(), 'w', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'w', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        next = NFA.match(parser.getNFA(), 'r', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'r', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), true);
 
-        next = NFA.match(parser.getNFA(), 'w', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'w', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        next = NFA.match(parser.getNFA(), 'r', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'r', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), true);
     }
 
@@ -700,24 +675,19 @@ public class RegexParser_Test {
         parser.current = NFA.getEpClosure(parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        Set<State> next = NFA.match(parser.getNFA(), 's', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 's', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        next = NFA.match(parser.getNFA(), 'd', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'd', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        next = NFA.match(parser.getNFA(), 'd', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'd', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        next = NFA.match(parser.getNFA(), 'd', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'd', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
         
-        next = NFA.match(parser.getNFA(), '8', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), '8', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), true);
     }
 
@@ -732,36 +702,28 @@ public class RegexParser_Test {
         parser.current = NFA.getEpClosure(parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        Set<State> next = NFA.match(parser.getNFA(), 's', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 's', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        next = NFA.match(parser.getNFA(), 'c', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'c', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        next = NFA.match(parser.getNFA(), 'c', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'c', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
         
-        next = NFA.match(parser.getNFA(), '8', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), '8', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), true);
 
-        next = NFA.match(parser.getNFA(), 'w', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'w', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        next = NFA.match(parser.getNFA(), 'r', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'r', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), true);
 
-        next = NFA.match(parser.getNFA(), 'w', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'w', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        next = NFA.match(parser.getNFA(), 'r', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'r', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), true);
     }
 
@@ -774,20 +736,16 @@ public class RegexParser_Test {
         parser.current = NFA.getEpClosure(parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), true);
 
-        Set<State> next = NFA.match(parser.getNFA(), ' ', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), ' ', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        next = NFA.match(parser.getNFA(), ' ', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), ' ', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        next = NFA.match(parser.getNFA(), 'a', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'a', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-        next = NFA.match(parser.getNFA(), 'b', parser.current);
-        parser.current = NFA.getEpClosure(next);
+        parser.current = NFA.match(parser.getNFA(), 'b', parser.current);
         Assert.assertEquals(State.isAcceptable(parser.current), false);
     }
 }
