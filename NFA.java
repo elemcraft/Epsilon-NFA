@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class NFA {
-    public State start;
+    private State start;
     private State end;
 
     private int count; // total number of states
@@ -125,8 +125,10 @@ public class NFA {
         return blocks.pop();
     }
 
-    // Get the epsilon closure of the start state and store them in the current states
+    // Get the epsilon closure of the start state and store them in the current
+    // states
     public void initializeNFA() {
+        current.clear();
         current.add(start);
         current = getEpClosure(current);
     }
@@ -158,27 +160,17 @@ public class NFA {
 
     // Traverse the nfa to see if the input word matches the regular expression
     public boolean match(String word) {
-        Set<State> current = new HashSet<>();
-        current.add(start);
-        current = getEpClosure(current);
+        initializeNFA();
 
         for (char symbol : word.toCharArray()) {
-            Set<State> next = new HashSet<>();
-            for (State state : current) {
-                State neighbor = state.to.get(symbol);
-                if (neighbor != null) {
-                    next.add(neighbor);
-                }
-            }
-            current = getEpClosure(next);
+            matchSymbol(symbol);
         }
 
         return State.isAcceptable(current);
     }
 
-    // Overload match method for verbose mode
-    // to check the input character by character
-    public void match(char symbol) {
+    // Update the current states for the input symbol
+    public void matchSymbol(char symbol) {
         Set<State> next = new HashSet<>();
 
         for (State state : current) {

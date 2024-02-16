@@ -7,23 +7,23 @@ public class RegexParser {
      */
     private final Scanner userInput;
     private String regEx;
-    private NFA machine;
+    private NFA nfa;
 
     RegexParser() {
         userInput = new Scanner(System.in);
         regEx = new String();
-        machine = null;
+        nfa = null;
     }
 
     // Getter for nfa machine
     public NFA getNFA() {
-        return machine;
+        return nfa;
     }
 
     // Behaves like setter for the "machine" field
-    public void initializeNFA() {
-        machine = NFA.buildMachine(regEx);
-        machine.initializeNFA();
+    public void buildNFA() {
+        nfa = NFA.buildMachine(regEx);
+        nfa.initializeNFA();
     }
 
     // Behaves like setter for the "regEx" field
@@ -214,36 +214,36 @@ public class RegexParser {
         parser.readRegEx(); // Read in an regular expression
 
         if (isVerboseMode(args)) { // verbose mode
-            parser.initializeNFA();
+            parser.buildNFA();
             
             // Print transition table
-            parser.machine.labelStates();
+            parser.nfa.labelStates();
             List<Character> symbols = parser.getRegexSymbols();
-            parser.machine.printTransitionTable(symbols);
+            parser.nfa.printTransitionTable(symbols);
 
             System.out.println("Ready");
-            System.out.println(State.isAcceptable(parser.machine.current));
+            System.out.println(State.isAcceptable(parser.nfa.current));
 
             // Repeatly checking input character by character
             while (true) {
                 String input = parser.userInput.nextLine();
                 if (input.length() == 0) {
-                    System.out.println(State.isAcceptable(parser.machine.current));
+                    System.out.println(State.isAcceptable(parser.nfa.current));
                     continue;
                 }
 
                 char symbol = input.charAt(0);
-                parser.machine.match(symbol);
-                System.out.println(State.isAcceptable(parser.machine.current));
+                parser.nfa.matchSymbol(symbol);
+                System.out.println(State.isAcceptable(parser.nfa.current));
             }
         } else { // normal mode
-            parser.initializeNFA();
+            parser.buildNFA();
             System.out.println("Ready");
 
             // Repeatly checking input
             while (true) {
                 String input = parser.userInput.nextLine();
-                boolean result = parser.machine.match(input);
+                boolean result = parser.nfa.match(input);
                 System.out.println(result);
             }
         }
