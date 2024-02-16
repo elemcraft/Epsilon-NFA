@@ -6,12 +6,14 @@ public class NFA {
 
     private int count; // total number of states
     private Set<State> states;
+    public Set<State> current; // The current states that this NFA is in
 
     public NFA(State start, State end) {
         count = 0;
         states = new HashSet<>();
         this.start = start;
         this.end = end;
+        current = new HashSet<>();
     }
 
     // Building block: epsilon transition
@@ -123,6 +125,12 @@ public class NFA {
         return blocks.pop();
     }
 
+    // Get the epsilon closure of the start state and store them in the current states
+    public void initializeNFA() {
+        current.add(start);
+        current = getEpClosure(current);
+    }
+
     // Get the epsilon closure of the input state set
     public static Set<State> getEpClosure(Set<State> states) {
         Set<State> epClosure = new HashSet<>();
@@ -170,17 +178,17 @@ public class NFA {
 
     // Overload match method for verbose mode
     // to check the input character by character
-    public static Set<State> match(NFA nfa, char symbol, Set<State> current) {
-        Set<State> nextStates = new HashSet<>();
+    public void match(char symbol) {
+        Set<State> next = new HashSet<>();
 
         for (State state : current) {
-            State next = state.to.get(symbol);
-            if (next != null) {
-                nextStates.add(next);
+            State neighbor = state.to.get(symbol);
+            if (neighbor != null) {
+                next.add(neighbor);
             }
         }
 
-        return getEpClosure(nextStates);
+        current = getEpClosure(next);
     }
 
     public int labelStates() {

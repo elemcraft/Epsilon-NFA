@@ -5,14 +5,13 @@ public class RegexParser {
      * Only need to create a Scanner that's tied to System.in one time
      * and use it for all console input.
      */
-    private final Scanner userInput = new Scanner(System.in);
+    private final Scanner userInput;
     private String regEx;
-    public Set<State> current; // The set containing all current states
     private NFA machine;
 
     RegexParser() {
+        userInput = new Scanner(System.in);
         regEx = new String();
-        current = new HashSet<>();
         machine = null;
     }
 
@@ -24,6 +23,7 @@ public class RegexParser {
     // Behaves like setter for the "machine" field
     public void initializeNFA() {
         machine = NFA.buildMachine(regEx);
+        machine.initializeNFA();
     }
 
     // Behaves like setter for the "regEx" field
@@ -215,29 +215,26 @@ public class RegexParser {
 
         if (isVerboseMode(args)) { // verbose mode
             parser.initializeNFA();
-            parser.machine.labelStates();
-
+            
             // Print transition table
+            parser.machine.labelStates();
             List<Character> symbols = parser.getRegexSymbols();
             parser.machine.printTransitionTable(symbols);
 
             System.out.println("Ready");
-
-            parser.current.add(parser.machine.start);
-            parser.current = NFA.getEpClosure(parser.current);
-            System.out.println(State.isAcceptable(parser.current));
+            System.out.println(State.isAcceptable(parser.machine.current));
 
             // Repeatly checking input character by character
             while (true) {
                 String input = parser.userInput.nextLine();
                 if (input.length() == 0) {
-                    System.out.println(State.isAcceptable(parser.current));
+                    System.out.println(State.isAcceptable(parser.machine.current));
                     continue;
                 }
 
                 char symbol = input.charAt(0);
-                parser.current = NFA.match(parser.machine, symbol, parser.current);
-                System.out.println(State.isAcceptable(parser.current));
+                parser.machine.match(symbol);
+                System.out.println(State.isAcceptable(parser.machine.current));
             }
         } else { // normal mode
             parser.initializeNFA();
