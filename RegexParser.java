@@ -146,7 +146,7 @@ public class RegexParser {
 
     // Convert regular expression from infix to postfix
     private static String toPostfix(String exp) {
-        // the precedence of operators
+        // The precedence of operators
         Map<Character, Integer> pre = new HashMap<>();
         pre.put('|', 0);
         pre.put('.', 1);
@@ -205,28 +205,29 @@ public class RegexParser {
         return res;
     }
 
+    private static boolean isVerboseMode(String[] args) {
+        return args.length > 0 && args[0].equals("-v");
+    }
+
     public static void main(String[] args) {
         RegexParser parser = new RegexParser();
+        parser.readRegEx(); // Read in an regular expression
 
-        // read in an regular expression
-        parser.readRegEx();
-
-        // verbose mode or normal mode
-        if (args.length > 0 && args[0].equals("-v")) { // verbose mode
-            // build verbose mode state machine
+        if (isVerboseMode(args)) { // verbose mode
             parser.initializeNFA();
             parser.machine.labelStates();
 
+            // Print transition table
             List<Character> symbols = parser.getRegexSymbols();
             parser.machine.printTransitionTable(symbols);
 
             System.out.println("Ready");
 
-            // Repeatly checking input(letter by letter)
             parser.current.add(parser.machine.start);
             parser.current = NFA.getEpClosure(parser.current);
             System.out.println(State.isAcceptable(parser.current));
 
+            // Repeatly checking input character by character
             while (true) {
                 String input = parser.userInput.nextLine();
                 if (input.length() == 0) {
@@ -235,10 +236,8 @@ public class RegexParser {
                 }
 
                 char symbol = input.charAt(0);
-                Set<State> next = NFA.match(parser.machine, symbol, parser.current);
-                next = NFA.getEpClosure(next);
-                System.out.println(State.isAcceptable(next));
-                parser.current = next;
+                parser.current = NFA.match(parser.machine, symbol, parser.current);
+                System.out.println(State.isAcceptable(parser.current));
             }
         } else { // normal mode
             parser.initializeNFA();
