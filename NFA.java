@@ -2,7 +2,7 @@ import java.util.*;
 
 public class NFA {
     public State start;
-    public State end;
+    private State end;
 
     private int numOfStates;
     private List<State> states;
@@ -186,23 +186,23 @@ public class NFA {
      * kind of like epsilon closure,
      * but nextStates only contains fringe states of epsilon closure
      */
-    private static void addNextState(State state, Set<State> nextStates, Set<State> visited) {
+    private static void addNextState(State state, Set<State> next, Set<State> visited) {
         if (state.epsilonTo.size() > 0) {
             for (State st : state.epsilonTo) {
                 if (!visited.contains(st)) {
                     visited.add(st);
-                    addNextState(st, nextStates, visited);
+                    addNextState(st, next, visited);
                 }
             }
         } else {
-            nextStates.add(state);
+            next.add(state);
         }
     }
 
-    // Traverse the nfa to see if the input word match the regular expression
-    public static boolean match(NFA nfa, String word) {
+    // Traverse the nfa to see if the input word matches the regular expression
+    public boolean match(String word) {
         Set<State> current = new HashSet<>();
-        addNextState(nfa.start, current, new HashSet<>());
+        addNextState(start, current, new HashSet<>());
 
         for (char symbol : word.toCharArray()) {
             Set<State> next = new HashSet<>();

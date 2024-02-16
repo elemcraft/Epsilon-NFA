@@ -30,10 +30,9 @@ public class RegexParser {
     public void readRegEx() throws IllegalArgumentException {
         String regEx = userInput.nextLine();
 
-        // Invalid regEx would print an error message and throw an exception
+        // Invalid regular expression would throw an exception
         if (isValid(regEx) == false) {
-            System.out.println("Invalid regular expression");
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Invalid regular expression");
         }
 
         // Transform the regular expression to postfix
@@ -231,8 +230,7 @@ public class RegexParser {
         parser.readRegEx();
 
         // verbose mode or normal mode
-        if (args.length > 0 && args[0].equals("-v")) // verbose mode
-        {
+        if (args.length > 0 && args[0].equals("-v")) { // verbose mode
             // build verbose mode state machine
             NFA machine = NFA.buildVerboseMachine(parser.regEx);
 
