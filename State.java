@@ -29,13 +29,4 @@ public class State {
     public String toString() {
         return "q" + index;
     }
-
-    public static boolean isAcceptable(Set<State> stateSet) {
-        for (State state : stateSet) {
-            if (state.isFinal) {
-                return true;
-            }
-        }
-        return false;
-    }
 }
