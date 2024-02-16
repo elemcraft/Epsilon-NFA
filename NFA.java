@@ -4,12 +4,12 @@ public class NFA {
     public State start;
     private State end;
 
-    private int numOfStates;
-    private List<State> states;
+    private int count; // total number of states
+    private Set<State> states;
 
     public NFA(State start, State end) {
-        numOfStates = 0;
-        states = new ArrayList<State>();
+        count = 0;
+        states = new HashSet<>();
         this.start = start;
         this.end = end;
     }
@@ -85,7 +85,7 @@ public class NFA {
 
     // Assemble the building blocks
     public static NFA buildMachine(String postfixExp) {
-        // Special case
+        // Special case: empty regular expression
         if (postfixExp.length() == 0) {
             return fromEpsilon();
         }
@@ -123,55 +123,44 @@ public class NFA {
         return blocks.pop();
     }
 
-    public static NFA buildVerboseMachine(String postfixExp) {
-        NFA machine = buildMachine(postfixExp);
-        labelStates(machine);
-        return machine;
+    // Get the epsilon closure of the input state set
+    public static Set<State> getEpClosure(Set<State> stateSet) {
+        Set<State> epClosure = new HashSet<>();
+
+        // Perform dfs from every state in the current state set
+        for (State state : stateSet) {
+            dfs(state, epClosure);
+        }
+
+        return epClosure;
     }
 
-    public static void getEpsilonClosure(List<State> stateSet) {
-        while (true) {
-            // newStates serves as a temperary container to prevent concurrent modification
-            // exception
-            List<State> newStates = new ArrayList<State>();
+    // Depth first search from current state to get the epsilon closure
+    private static void dfs(State curr, Set<State> visited) {
+        if (visited.contains(curr)) {
+            return;
+        }
 
-            // search for new states that are not currently in the stateSet
-            for (State state : stateSet) {
-                for (State next : state.epsilonTo) {
-                    if (!stateSet.contains(next)) {
-                        newStates.add(next);
-                    }
-                }
-            }
+        visited.add(curr);
 
-            if (newStates.size() == 0)
-                break;
-
-            // add the new states to the stateSet
-            for (State state : newStates) {
-                if (!stateSet.contains(state)) {
-                    stateSet.add(state);
-                }
-            }
+        for (State neighbor : curr.epsilonTo) {
+            dfs(neighbor, visited);
         }
     }
 
-    // overload match method for verbose mode machine to check the input character
-    // by character
-    public static List<State> match(NFA nfa, char letter, List<State> currentStates) {
-        List<State> nextStates = new ArrayList<State>();
+    // Overload match method for verbose mode
+    // to check the input character by character
+    public static Set<State> match(NFA nfa, char symbol, Set<State> current) {
+        Set<State> nextStates = new HashSet<>();
 
-        for (State state : currentStates) {
-            State next = state.to.get(letter);
-            if (next != null)
+        for (State state : current) {
+            State next = state.to.get(symbol);
+            if (next != null) {
                 nextStates.add(next);
+            }
         }
 
-        getEpsilonClosure(nextStates);
-
-        // Loop through the current states to see if any state in the state set is a
-        // final state
-        return nextStates;
+        return getEpClosure(nextStates);
     }
 
     /*
@@ -219,34 +208,31 @@ public class NFA {
         return State.isAcceptable(current);
     }
 
-    private static int labelStates(NFA machine) {
-        machine.numOfStates = 0;
-        machine.states.clear();
-        label(machine.start, machine);
-
-        return machine.numOfStates;
+    public int labelStates() {
+        label(start);
+        return count;
     }
 
-    private static void label(State state, NFA machine) {
-        // check if the current state has been visited
-        if (machine.states.contains(state))
+    private void label(State curr) {
+        // Check if the current state has been visited
+        if (curr == null || states.contains(curr)) {
             return;
+        }
 
-        state.index = machine.numOfStates;
-        machine.numOfStates++;
-        machine.states.add(state);
+        curr.index = count;
+        count++;
+        states.add(curr);
 
-        // go to next states
-        if (state.to.next != null)
-            label(state.to.next, machine);
-
-        for (State st : state.epsilonTo) {
-            label(st, machine);
+        // Explore neighboring states
+        label(curr.to.next);
+        for (State st : curr.epsilonTo) {
+            label(st);
         }
     }
 
-    private String[][] getTransitionTable(List<Character> symbols) {
-        String[][] table = new String[numOfStates][symbols.size() + 1]; // add one for the epsilon column
+    // Construct transition table
+    private String[][] buildTable(List<Character> symbols) {
+        String[][] table = new String[count][symbols.size() + 1]; // add one for the epsilon column
         for (String[] row : table) {
             Arrays.fill(row, new String());
         }
@@ -272,7 +258,7 @@ public class NFA {
     }
 
     public void printTransitionTable(List<Character> symbols) {
-        String[][] table = getTransitionTable(symbols);
+        String[][] table = buildTable(symbols);
 
         // find the max length of all the strings
         int maxLength = "Epsilon".length();

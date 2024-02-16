@@ -7,12 +7,12 @@ public class RegexParser {
      */
     private final Scanner userInput = new Scanner(System.in);
     private String regEx;
-    public List<State> currentStates;
+    public Set<State> current; // The set containing all current states
     private NFA machine;
 
     RegexParser() {
         regEx = new String();
-        currentStates = new ArrayList<State>();
+        current = new HashSet<>();
         machine = null;
     }
 
@@ -191,9 +191,9 @@ public class RegexParser {
         return output;
     }
 
-    private static List<Character> getRegexSymbols(String exp) {
+    private List<Character> getRegexSymbols() {
         Set<Character> symbols = new HashSet<>();
-        for (char curr : exp.toCharArray()) {
+        for (char curr : regEx.toCharArray()) {
             // Add curr character to the symbols set if it is not an operator
             if (curr != '|' && curr != '*' && curr != '+' && curr != '.') {
                 symbols.add(curr);
@@ -205,24 +205,6 @@ public class RegexParser {
         return res;
     }
 
-    public boolean matchInputVerbose(NFA machine, String input) {
-        // if(currentStates.size() == 0) currentStates.add(machine.start);
-        NFA.getEpsilonClosure(currentStates);
-
-        if (input.length() == 0) {
-            // return State.isAcceptable(currentStates);
-        }
-
-        List<State> nextStates = NFA.match(machine, input.charAt(0), currentStates);
-        currentStates = nextStates;
-
-        return false; // State.isAcceptable(currentStates);
-    }
-
-    public void reset() {
-        currentStates.clear();
-    }
-
     public static void main(String[] args) {
         RegexParser parser = new RegexParser();
 
@@ -232,28 +214,31 @@ public class RegexParser {
         // verbose mode or normal mode
         if (args.length > 0 && args[0].equals("-v")) { // verbose mode
             // build verbose mode state machine
-            NFA machine = NFA.buildVerboseMachine(parser.regEx);
+            parser.initializeNFA();
+            parser.machine.labelStates();
 
-            List<Character> symbols = getRegexSymbols(parser.regEx);
-            machine.printTransitionTable(symbols);
+            List<Character> symbols = parser.getRegexSymbols();
+            parser.machine.printTransitionTable(symbols);
 
             System.out.println("Ready");
 
             // Repeatly checking input(letter by letter)
-            parser.currentStates.add(machine.start);
-            NFA.getEpsilonClosure(parser.currentStates);
-            // System.out.println(State.isAcceptable(parser.currentStates));
+            parser.current.add(parser.machine.start);
+            parser.current = NFA.getEpClosure(parser.current);
+            System.out.println(State.isAcceptable(parser.current));
 
             while (true) {
                 String input = parser.userInput.nextLine();
                 if (input.length() == 0) {
-                    // System.out.println(State.isAcceptable(parser.currentStates));
+                    System.out.println(State.isAcceptable(parser.current));
                     continue;
                 }
+
                 char symbol = input.charAt(0);
-                List<State> nextStates = NFA.match(machine, symbol, parser.currentStates);
-                // System.out.println(State.isAcceptable(nextStates));
-                parser.currentStates = nextStates;
+                Set<State> next = NFA.match(parser.machine, symbol, parser.current);
+                next = NFA.getEpClosure(next);
+                System.out.println(State.isAcceptable(next));
+                parser.current = next;
             }
         } else { // normal mode
             parser.initializeNFA();

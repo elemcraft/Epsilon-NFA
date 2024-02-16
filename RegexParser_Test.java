@@ -1,4 +1,5 @@
 import java.io.ByteArrayInputStream;
+import java.util.Set;
 import org.junit.*;
 
 public class RegexParser_Test {
@@ -25,7 +26,7 @@ public class RegexParser_Test {
     }
 
     @Test
-    public void emptyString() {
+    public void emptyRegEx() {
         RegexParser parser = new RegexParser();
         parser.initializeNFA();
         boolean output1 = parser.getNFA().match("");
@@ -453,278 +454,340 @@ public class RegexParser_Test {
         RegexParser parser = new RegexParser();
         parser.readRegEx();
     }
-    
-    ///============================================================
-    // @Test
-    // public void verboseModeBasic() {
-    //     RegexParser parser = new RegexParser();
-    //     parser.readRegEx("0123456789");
-    //     NFA machine = NFA.buildVerboseMachine(parser.regEx);
-    //     parser.currentStates.add(machine.start);
-    //     boolean output = false;
-    //     for (int i = 0; i < 9; i++) {
-    //         output = parser.getNFA().matchInputVerbose(machine, String.valueOf(i));
-    //         Assert.assertEquals(output, false);
-    //     }
-    //     output = parser.getNFA().matchInputVerbose(machine, "9");
-    //     Assert.assertEquals(output, true);
 
-    //     parser.reset();
-    //     parser.readRegEx("abcdefghijkl");
-    //     machine = NFA.buildVerboseMachine(parser.regEx);
-    //     parser.currentStates.add(machine.start);
-    //     for (int i = 97; i < 108; i++) {
-    //         output = parser.getNFA().matchInputVerbose(machine, String.valueOf((char) i));
-    //         Assert.assertEquals(output, false);
-    //     }
-    //     output = parser.getNFA().matchInputVerbose(machine, "l");
-    //     Assert.assertEquals(output, true);
+    @Test
+    public void verbose_Basic() {
+        setUserInput("0123456789");
+        RegexParser parser = new RegexParser();
+        parser.readRegEx();
+        parser.initializeNFA();
+        parser.getNFA().labelStates();
 
-    //     parser.reset();
+        parser.current.add(parser.getNFA().start);
+        parser.current = NFA.getEpClosure(parser.current);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-    //     String regex = new String();
-    //     for (int i = 47; i <= 123; i++) {
-    //         regex += Character.toString(i);
-    //     }
-    //     parser.readRegEx(regex);
-    //     machine = NFA.buildVerboseMachine(parser.regEx);
-    //     parser.currentStates.add(machine.start);
-    //     for (int i = 47; i < 123; i++) {
-    //         output = parser.getNFA().matchInputVerbose(machine, String.valueOf((char) i));
-    //         Assert.assertEquals(output, false);
-    //     }
-    //     output = parser.getNFA().matchInputVerbose(machine, "{");
-    //     Assert.assertEquals(output, true);
-    // }
+        for (int i = 0; i < 9; i++) {
+            Set<State> next = NFA.match(parser.getNFA(), (char) (i + '0'), parser.current);
+            parser.current = NFA.getEpClosure(next);
+            Assert.assertEquals(State.isAcceptable(parser.current), false);
+        }
+        Set<State> next = NFA.match(parser.getNFA(), '9', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), true);
+    }
 
-    // @Test
-    // public void verboseModeSingleKleeneStar() {
-    //     RegexParser parser = new RegexParser();
+    @Test
+    public void verbose_Basic2() {
+        setUserInput("abcdefghijklmnopqrstuvwxyz");
+        RegexParser parser = new RegexParser();
+        parser.readRegEx();
+        parser.initializeNFA();
+        parser.getNFA().labelStates();
 
-    //     parser.readRegEx("k*");
-    //     NFA machine = NFA.buildVerboseMachine(parser.regEx);
-    //     parser.currentStates.add(machine.start);
-    //     boolean output = parser.getNFA().matchInputVerbose(machine, new String());
-    //     Assert.assertEquals(output, true);
-    //     for (int i = 0; i < 15; i++) {
-    //         output = parser.getNFA().matchInputVerbose(machine, "k");
-    //         Assert.assertEquals(output, true);
-    //     }
+        parser.current.add(parser.getNFA().start);
+        parser.current = NFA.getEpClosure(parser.current);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-    //     parser.reset();
-    //     parser.readRegEx("gb*");
-    //     machine = NFA.buildVerboseMachine(parser.regEx);
-    //     parser.currentStates.add(machine.start);
-    //     output = parser.getNFA().matchInputVerbose(machine, new String());
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "g");
-    //     Assert.assertEquals(output, true);
-    //     for (int i = 0; i < 15; i++) {
-    //         output = parser.getNFA().matchInputVerbose(machine, "b");
-    //         Assert.assertEquals(output, true);
-    //     }
-    // }
+        for (int i = 0; i < 25; i++) {
+            Set<State> next = NFA.match(parser.getNFA(), (char) (i + 'a'), parser.current);
+            parser.current = NFA.getEpClosure(next);
+            Assert.assertEquals(State.isAcceptable(parser.current), false);
+        }
+        Set<State> next = NFA.match(parser.getNFA(), 'z', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), true);
+    }
 
-    // @Test
-    // public void verboseModeSingleKleenePlus() {
-    //     RegexParser parser = new RegexParser();
+    @Test
+    public void verbose_SingleKleeneStar() {
+        setUserInput("k*");
+        RegexParser parser = new RegexParser();
+        parser.readRegEx();
+        parser.initializeNFA();
+        parser.getNFA().labelStates();
 
-    //     parser.readRegEx(";+");
-    //     NFA machine = NFA.buildVerboseMachine(parser.regEx);
-    //     parser.currentStates.add(machine.start);
-    //     boolean output = parser.getNFA().matchInputVerbose(machine, new String());
-    //     Assert.assertEquals(output, false);
-    //     for (int i = 0; i < 15; i++) {
-    //         output = parser.getNFA().matchInputVerbose(machine, ";");
-    //         Assert.assertEquals(output, true);
-    //     }
+        parser.current.add(parser.getNFA().start);
+        parser.current = NFA.getEpClosure(parser.current);
+        Assert.assertEquals(State.isAcceptable(parser.current), true);
 
-    //     parser.reset();
-    //     parser.readRegEx("[]+");
-    //     machine = NFA.buildVerboseMachine(parser.regEx);
-    //     parser.currentStates.add(machine.start);
-    //     output = parser.getNFA().matchInputVerbose(machine, new String());
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "[");
-    //     Assert.assertEquals(output, false);
-    //     for (int i = 0; i < 15; i++) {
-    //         output = parser.getNFA().matchInputVerbose(machine, "]");
-    //         Assert.assertEquals(output, true);
-    //     }
-    // }
+        for (int i = 0; i < 100; i++) {
+            Set<State> next = NFA.match(parser.getNFA(), 'k', parser.current);
+            parser.current = NFA.getEpClosure(next);
+            Assert.assertEquals(State.isAcceptable(parser.current), true);
+        }
+    }
 
-    // @Test
-    // public void verboseModeSingleAlternation() {
-    //     RegexParser parser = new RegexParser();
+    @Test
+    public void verbose_SingleKleeneStar2() {
+        setUserInput("ab*");
+        RegexParser parser = new RegexParser();
+        parser.readRegEx();
+        parser.initializeNFA();
+        parser.getNFA().labelStates();
 
-    //     parser.readRegEx("be|ur");
-    //     NFA machine = NFA.buildVerboseMachine(parser.regEx);
-    //     parser.currentStates.add(machine.start);
-    //     boolean output = parser.getNFA().matchInputVerbose(machine, "b");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "e");
-    //     Assert.assertEquals(output, true);
-    //     output = parser.getNFA().matchInputVerbose(machine, "u");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "r");
-    //     Assert.assertEquals(output, false);
+        parser.current.add(parser.getNFA().start);
+        parser.current = NFA.getEpClosure(parser.current);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-    //     parser.reset();
-    //     parser.currentStates.add(machine.start);
-    //     output = parser.getNFA().matchInputVerbose(machine, "u");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "r");
-    //     Assert.assertEquals(output, true);
-    //     output = parser.getNFA().matchInputVerbose(machine, "b");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "e");
-    //     Assert.assertEquals(output, false);
-    // }
+        Set<State> next = NFA.match(parser.getNFA(), 'a', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), true);
 
-    // @Test
-    // public void verboseModeOnePairOfBrackets() {
-    //     RegexParser parser = new RegexParser();
+        for (int i = 0; i < 100; i++) {
+            next = NFA.match(parser.getNFA(), 'b', parser.current);
+            parser.current = NFA.getEpClosure(next);
+            Assert.assertEquals(State.isAcceptable(parser.current), true);
+        }
+    }
 
-    //     parser.readRegEx("(GW5)F7");
-    //     NFA machine = NFA.buildVerboseMachine(parser.regEx);
-    //     parser.currentStates.add(machine.start);
-    //     boolean output = parser.getNFA().matchInputVerbose(machine, "G");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "W");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "5");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "F");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "7");
-    //     Assert.assertEquals(output, true);
-    // }
+    @Test
+    public void verbose_SingleKleenePlus() {
+        setUserInput("k+");
+        RegexParser parser = new RegexParser();
+        parser.readRegEx();
+        parser.initializeNFA();
+        parser.getNFA().labelStates();
 
-    // @Test
-    // public void verboseModeMultipleBracketsAndOperators() {
-    //     RegexParser parser = new RegexParser();
+        parser.current.add(parser.getNFA().start);
+        parser.current = NFA.getEpClosure(parser.current);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-    //     parser.readRegEx("s(d+|c*)8(wr)*");
-    //     NFA machine = NFA.buildVerboseMachine(parser.regEx);
-    //     parser.currentStates.add(machine.start);
-    //     boolean output = parser.getNFA().matchInputVerbose(machine, "");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "s");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "8");
-    //     Assert.assertEquals(output, true);
+        for (int i = 0; i < 100; i++) {
+            Set<State> next = NFA.match(parser.getNFA(), 'k', parser.current);
+            parser.current = NFA.getEpClosure(next);
+            Assert.assertEquals(State.isAcceptable(parser.current), true);
+        }
+    }
 
-    //     parser.reset();
-    //     parser.currentStates.add(machine.start);
-    //     output = parser.getNFA().matchInputVerbose(machine, "s");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "d");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "8");
-    //     Assert.assertEquals(output, true);
+    @Test
+    public void verbose_SingleKleenePlus2() {
+        setUserInput("fh+");
+        RegexParser parser = new RegexParser();
+        parser.readRegEx();
+        parser.initializeNFA();
+        parser.getNFA().labelStates();
 
-    //     parser.reset();
-    //     parser.currentStates.add(machine.start);
-    //     output = parser.getNFA().matchInputVerbose(machine, "s");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "c");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "c");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "c");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "8");
-    //     Assert.assertEquals(output, true);
-    //     output = parser.getNFA().matchInputVerbose(machine, "w");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "r");
-    //     Assert.assertEquals(output, true);
-    //     output = parser.getNFA().matchInputVerbose(machine, "w");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "r");
-    //     Assert.assertEquals(output, true);
-    // }
+        parser.current.add(parser.getNFA().start);
+        parser.current = NFA.getEpClosure(parser.current);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-    // @Test
-    // public void verboseModeMultipleBracketsAndOperators2() {
-    //     RegexParser parser = new RegexParser();
+        Set<State> next = NFA.match(parser.getNFA(), 'f', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-    //     parser.readRegEx("s+(d+|c*)8*(wr)*");
-    //     NFA machine = NFA.buildVerboseMachine(parser.regEx);
-    //     parser.currentStates.add(machine.start);
-    //     parser.currentStates.add(machine.start);
-    //     boolean output = parser.getNFA().matchInputVerbose(machine, "");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "s");
-    //     Assert.assertEquals(output, true);
-    //     output = parser.getNFA().matchInputVerbose(machine, "s");
-    //     Assert.assertEquals(output, true);
-    //     output = parser.getNFA().matchInputVerbose(machine, "8");
-    //     Assert.assertEquals(output, true);
+        for (int i = 0; i < 100; i++) {
+            next = NFA.match(parser.getNFA(), 'h', parser.current);
+            parser.current = NFA.getEpClosure(next);
+            Assert.assertEquals(State.isAcceptable(parser.current), true);
+        }
+    }
 
-    //     parser.reset();
-    //     parser.currentStates.add(machine.start);
-    //     output = parser.getNFA().matchInputVerbose(machine, "s");
-    //     Assert.assertEquals(output, true);
-    //     output = parser.getNFA().matchInputVerbose(machine, "c");
-    //     Assert.assertEquals(output, true);
-    //     output = parser.getNFA().matchInputVerbose(machine, "8");
-    //     Assert.assertEquals(output, true);
-    //     output = parser.getNFA().matchInputVerbose(machine, "8");
-    //     Assert.assertEquals(output, true);
-    //     output = parser.getNFA().matchInputVerbose(machine, "w");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "r");
-    //     Assert.assertEquals(output, true);
-    //     output = parser.getNFA().matchInputVerbose(machine, "w");
-    //     Assert.assertEquals(output, false);
+    @Test
+    public void verbose_SingleAlternation() {
+        setUserInput("ab|dc");
+        RegexParser parser = new RegexParser();
+        parser.readRegEx();
+        parser.initializeNFA();
+        parser.getNFA().labelStates();
 
-    //     parser.reset();
-    //     parser.currentStates.add(machine.start);
-    //     output = parser.getNFA().matchInputVerbose(machine, "s");
-    //     Assert.assertEquals(output, true);
-    //     output = parser.getNFA().matchInputVerbose(machine, "d");
-    //     Assert.assertEquals(output, true);
-    //     output = parser.getNFA().matchInputVerbose(machine, "d");
-    //     Assert.assertEquals(output, true);
-    //     output = parser.getNFA().matchInputVerbose(machine, "w");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "r");
-    //     Assert.assertEquals(output, true);
-    //     output = parser.getNFA().matchInputVerbose(machine, "w");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "r");
-    //     Assert.assertEquals(output, true);
-    // }
+        parser.current.add(parser.getNFA().start);
+        parser.current = NFA.getEpClosure(parser.current);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-    // @Test
-    // public void emptyRegularExpression() {
-    //     RegexParser parser = new RegexParser();
-    //     parser.readRegEx("");
-    //     boolean output = parser.getNFA().matchInput("");
-    //     boolean output1 = parser.getNFA().matchInput(" ");
-    //     boolean output2 = parser.getNFA().matchInput("s");
-    //     boolean output3 = parser.getNFA().matchInput("14");
-    //     Assert.assertEquals(output, true);
-    //     Assert.assertEquals(output1, false);
-    //     Assert.assertEquals(output2, false);
-    //     Assert.assertEquals(output3, false);
-    // }
+        Set<State> next = NFA.match(parser.getNFA(), 'a', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
 
-    // @Test
-    // public void verboseEmptyRegularExpression() {
-    //     RegexParser parser = new RegexParser();
+        next = NFA.match(parser.getNFA(), 'b', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), true);
+    }
 
-    //     parser.readRegEx("");
-    //     NFA machine = NFA.buildVerboseMachine(parser.regEx);
-    //     parser.currentStates.add(machine.start);
-    //     boolean output = parser.getNFA().matchInputVerbose(machine, "");
-    //     Assert.assertEquals(output, true);
-    //     output = parser.getNFA().matchInputVerbose(machine, "");
-    //     Assert.assertEquals(output, true);
-    //     output = parser.getNFA().matchInputVerbose(machine, " ");
-    //     Assert.assertEquals(output, false);
-    //     output = parser.getNFA().matchInputVerbose(machine, "");
-    //     Assert.assertEquals(output, false);
-    // }
+    @Test
+    public void verbose_SingleAlternation2() {
+        setUserInput("ab|dc");
+        RegexParser parser = new RegexParser();
+        parser.readRegEx();
+        parser.initializeNFA();
+        parser.getNFA().labelStates();
+
+        parser.current.add(parser.getNFA().start);
+        parser.current = NFA.getEpClosure(parser.current);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+
+        Set<State> next = NFA.match(parser.getNFA(), 'd', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+
+        next = NFA.match(parser.getNFA(), 'c', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), true);
+    }
+
+    @Test
+    public void verbose_OnePairOfBrackets() {
+        setUserInput("(ab)c");
+        RegexParser parser = new RegexParser();
+        parser.readRegEx();
+        parser.initializeNFA();
+
+        parser.current.add(parser.getNFA().start);
+        parser.current = NFA.getEpClosure(parser.current);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+
+        Set<State> next = NFA.match(parser.getNFA(), 'a', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+
+        next = NFA.match(parser.getNFA(), 'b', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+
+        next = NFA.match(parser.getNFA(), 'c', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), true);
+
+        next = NFA.match(parser.getNFA(), 'a', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+    }
+
+    @Test
+    public void verbose_MultipleBracketsAndOperators() {
+        setUserInput("s(d+|c*)8(wr)*");
+        RegexParser parser = new RegexParser();
+        parser.readRegEx();
+        parser.initializeNFA();
+
+        parser.current.add(parser.getNFA().start);
+        parser.current = NFA.getEpClosure(parser.current);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+
+        Set<State> next = NFA.match(parser.getNFA(), 's', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+        
+        next = NFA.match(parser.getNFA(), '8', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), true);
+
+        next = NFA.match(parser.getNFA(), 'w', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+
+        next = NFA.match(parser.getNFA(), 'r', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), true);
+
+        next = NFA.match(parser.getNFA(), 'w', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+
+        next = NFA.match(parser.getNFA(), 'r', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), true);
+    }
+
+    @Test
+    public void verbose_MultipleBracketsAndOperators2() {
+        setUserInput("s(d+|c*)8(wr)*");
+        RegexParser parser = new RegexParser();
+        parser.readRegEx();
+        parser.initializeNFA();
+
+        parser.current.add(parser.getNFA().start);
+        parser.current = NFA.getEpClosure(parser.current);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+
+        Set<State> next = NFA.match(parser.getNFA(), 's', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+
+        next = NFA.match(parser.getNFA(), 'd', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+
+        next = NFA.match(parser.getNFA(), 'd', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+
+        next = NFA.match(parser.getNFA(), 'd', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+        
+        next = NFA.match(parser.getNFA(), '8', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), true);
+    }
+
+    @Test
+    public void verbose_MultipleBracketsAndOperators3() {
+        setUserInput("s(d+|c*)8(wr)*");
+        RegexParser parser = new RegexParser();
+        parser.readRegEx();
+        parser.initializeNFA();
+
+        parser.current.add(parser.getNFA().start);
+        parser.current = NFA.getEpClosure(parser.current);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+
+        Set<State> next = NFA.match(parser.getNFA(), 's', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+
+        next = NFA.match(parser.getNFA(), 'c', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+
+        next = NFA.match(parser.getNFA(), 'c', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+        
+        next = NFA.match(parser.getNFA(), '8', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), true);
+
+        next = NFA.match(parser.getNFA(), 'w', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+
+        next = NFA.match(parser.getNFA(), 'r', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), true);
+
+        next = NFA.match(parser.getNFA(), 'w', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+
+        next = NFA.match(parser.getNFA(), 'r', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), true);
+    }
+
+    @Test
+    public void verbose_emptyRegEx() {
+        RegexParser parser = new RegexParser();
+        parser.initializeNFA();
+
+        parser.current.add(parser.getNFA().start);
+        parser.current = NFA.getEpClosure(parser.current);
+        Assert.assertEquals(State.isAcceptable(parser.current), true);
+
+        Set<State> next = NFA.match(parser.getNFA(), ' ', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+
+        next = NFA.match(parser.getNFA(), ' ', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+
+        next = NFA.match(parser.getNFA(), 'a', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+
+        next = NFA.match(parser.getNFA(), 'b', parser.current);
+        parser.current = NFA.getEpClosure(next);
+        Assert.assertEquals(State.isAcceptable(parser.current), false);
+    }
 }
