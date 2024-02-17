@@ -169,9 +169,8 @@ public class NFA {
         Set<State> next = new HashSet<>();
 
         for (State state : current) {
-            State neighbor = state.to.get(symbol);
-            if (neighbor != null) {
-                next.add(neighbor);
+            if (state.to.symbol == symbol) {
+                next.add(state.to.next);
             }
         }
 
@@ -222,7 +221,8 @@ public class NFA {
     }
 
     // Helper function for printTable()
-    // Prints the content of the entry after transforming it into a fixed length string
+    // Prints the content of the entry after transforming it into a fixed length
+    // string
     // Also prints the separator to the right of current entry
     private static void printEntry(String content) {
         final String len = "%10s"; // For each entry, the string length is set to 10
