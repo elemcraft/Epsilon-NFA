@@ -3,7 +3,7 @@ import java.util.*;
 public class NFA {
     private State start;
     private State end;
-    public Set<State> current; // The current states that this NFA is in
+    private Set<State> current; // The current states that this NFA is in
 
     public NFA(State start, State end) {
         this.start = start;
