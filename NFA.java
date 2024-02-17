@@ -169,7 +169,7 @@ public class NFA {
         Set<State> next = new HashSet<>();
 
         for (State state : current) {
-            if (state.to.symbol == symbol) {
+            if (state.to != null && state.to.symbol == symbol) {
                 next.add(state.to.next);
             }
         }
@@ -195,7 +195,7 @@ public class NFA {
         table.add(neighbors);
 
         // Explore neighboring states
-        if (curr.to.next != null) {
+        if (curr.to != null) {
             symbols.add(curr.to.symbol);
             neighbors.put(curr.to.symbol, Arrays.asList(curr.to.next));
             label(curr.to.next, table, symbols);

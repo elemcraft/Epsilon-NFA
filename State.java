@@ -14,7 +14,7 @@ public class State {
     public State(boolean isFinal) {
         id = -1;
         this.isFinal = isFinal;
-        to = new Transition();
+        to = null;
         epTo = new ArrayList<>();
     }
 
