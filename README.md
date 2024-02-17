@@ -12,7 +12,7 @@
 ## Code Outline
 1. Read in the regular expression
 2. Check the validity of the input regular expression and throw an exception if the regular expression is invalid
-3. Transform the regex into postfix
+3. Transform the regular expression from infix to postfix
 4. Build the ε-NFA
     * The final NFA are constructed from smaller NFA
     * Always make sure that every ε-NFA created has only one node as input and one node as output. Thus, every ε-NFA can be seen as a black box
