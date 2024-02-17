@@ -10,7 +10,7 @@ JDK 11, Test code would be run using JUnit 4
 
 ## Code Outline
 1. Read in the regular expression
-2. Check for validity of the input regex
+2. Check the validity of the input regular expression and throw an exception if the regular expression is invalid
 3. Transform the regex into postfix
 4. Build the ε-NFA
     * The final NFA are constructed from smaller NFA
