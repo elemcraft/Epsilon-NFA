@@ -19,31 +19,32 @@ JDK 11, Test code would be run using JUnit 4
     * If all the threads are dead and no threads are in the final states, the string does not match the regex
 
 ## NFA building blocks
-### Epsilon Block
+### 1. Epsilon Block
 <p align="center">
    <img width="700" alt="image" src="https://github.com/elemcraft/Epsilon-NFA/assets/48006644/e14b2367-c860-446c-84d4-0bb060631097">
 </p>
 
-### Symbol Block
+### 2. Symbol Block
 <p align="center">
    <img width="700" alt="image" src="https://github.com/elemcraft/Epsilon-NFA/assets/48006644/295e2e05-0969-4464-a2a8-15bac7e45053">
 </p>
-### Union Block: $R = S | T$
+
+### 3. Union Block: $R = S | T$
 <p align="center">
    <img width="700" alt="image" src="https://github.com/elemcraft/Epsilon-NFA/assets/48006644/32a47df0-5375-4e6d-a54f-e75bc607f7f2">
 </p>
 
-### Concatenation Block: $R = S⋅T$
+### 4. Concatenation Block: $R = S⋅T$
 <p align="center">
    <img width="700" alt="image" src="https://github.com/elemcraft/Epsilon-NFA/assets/48006644/2956820b-2aaf-4fbc-91d6-b32b4c60f7f4">
 </p>
 
-### Repetition Block (Kleene Star): $R = S^*$
+### 5. Repetition Block (Kleene Star): $R = S^*$
 <p align="center">
    <img width="700" alt="image" src="https://github.com/elemcraft/Epsilon-NFA/assets/48006644/c35dba09-239f-4174-a342-291258464e7b">
 </p>
 
-### One Or More Block (Kleene Plus): $R = S^+$
+### 6. One Or More Block (Kleene Plus): $R = S^+$
 <p align="center">
    <img width="700" alt="image" src="https://github.com/elemcraft/Epsilon-NFA/assets/48006644/203d3a96-774f-4c42-8722-45fb226cb601">
 </p>
