@@ -60,7 +60,7 @@ A regular expression can consist of
 <img width="500" alt="image" src="https://github.com/elemcraft/Epsilon-NFA/assets/48006644/82e52c7e-29bf-4e97-b595-5f23c45dcb62">
 
 ## Verbose Mode Example: Regular Expression = $(a^+|b)(a^*|c)$
-* The major feature for verbose mode is that NFA will not reset for every input string or character. Thus, each input starts from the current states instead of the initial states of NFA. In addition, verbose mode also prints out the transition table.
+* The major feature for verbose mode is that NFA will not reset for every input string or character. Thus, each input starts from the current states instead of the initial states of NFA. In addition, verbose mode also prints out the transition table. In the transition table, the start state is marked with `>` symbol, and the final state is marked with `*` symbol
 <img width="500" alt="image" src="https://github.com/elemcraft/Epsilon-NFA/assets/48006644/d1453ab6-b957-46b2-a1e1-a9ed995ce477">
 
 ### Example Diagram:
