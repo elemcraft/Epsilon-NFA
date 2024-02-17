@@ -15,7 +15,7 @@ public class RegexParser {
         nfa = null;
     }
 
-    // Getter for nfa machine
+    // Getter for nfa
     public NFA getNFA() {
         return nfa;
     }
