@@ -1,7 +1,8 @@
 # Regular Expression Parser
 
 ## Environment
-JDK 11, Test code would be run using JUnit 4
+1. Java Version: JDK 11
+2. External Libraries: Test code would be run using JUnit 4
 
 ## Commands
 * Compiled with: `javac RegexParser.java`
