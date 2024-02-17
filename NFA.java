@@ -81,7 +81,7 @@ public class NFA {
     }
 
     // Assemble the building blocks
-    public static NFA buildMachine(String postfixExp) {
+    public static NFA buildAutomaton(String postfixExp) {
         // Special case: empty regular expression
         if (postfixExp.length() == 0) {
             return fromEpsilon();
@@ -129,7 +129,7 @@ public class NFA {
     }
 
     // Get the epsilon closure of the input state set
-    public static Set<State> getEpClosure(Set<State> states) {
+    private static Set<State> getEpClosure(Set<State> states) {
         Set<State> epClosure = new HashSet<>();
 
         // Perform dfs from every state in the current state set
@@ -209,8 +209,9 @@ public class NFA {
 
     // Traverse the NFA to construct transition table
     private List<Map<Character, List<State>>> buildTable(Set<Character> symbols) {
-        // In table, 
-        // each entry stores the neighbor list of the state whose id is the same as entry index
+        // In table,
+        // each entry stores the neighbor list of the state whose id is the same as
+        // entry index
         // the neighbor list are hashmaps
         // key is the symbol required to transit to neighbors
         // value is the neighbor state list
@@ -224,14 +225,14 @@ public class NFA {
         Set<Character> symbols = new HashSet<>(); // Store all the symbols in the regEx
         List<Map<Character, List<State>>> table = buildTable(symbols);
 
-        final String format = "%8s";
+        final String len = "%8s"; // For each entry, the string length is set to 8
         final String separator = " | ";
 
         // Print header row
-        System.out.print(String.format(format, "") + separator); // Print header row title
-        System.out.print(String.format(format, "Epsilon") + separator);
+        System.out.print(String.format(len, new String()) + separator); // Print header row title
+        System.out.print(String.format(len, "Epsilon") + separator);
         for (char sym : symbols) {
-            System.out.print(String.format(format, Character.toString(sym)));
+            System.out.print(String.format(len, Character.toString(sym)));
             System.out.print(separator);
         }
         System.out.println(); // Change line
@@ -245,7 +246,7 @@ public class NFA {
             } else if (curr == end.id) { // Mark final state with '*' symbol
                 title = "*" + title;
             }
-            title = String.format(format, title);
+            title = String.format(len, title);
             System.out.print(title + separator);
 
             // Print epsilon column
@@ -256,7 +257,7 @@ public class NFA {
                 // Delete the list brackets
                 epEntry = epEntry.substring(1, epEntry.length() - 1);
             }
-            epEntry = String.format(format, epEntry);
+            epEntry = String.format(len, epEntry);
             System.out.print(epEntry + separator);
 
             // Print the content of current row
@@ -268,7 +269,7 @@ public class NFA {
                     // Delete the list brackets
                     entry = entry.substring(1, entry.length() - 1);
                 }
-                entry = String.format(format, entry);
+                entry = String.format(len, entry);
                 System.out.print(entry + separator);
             }
             System.out.println(); // Change line
