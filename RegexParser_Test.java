@@ -744,7 +744,7 @@ public class RegexParser_Test {
 
         parser.getNFA().match("f");
         Assert.assertEquals(parser.getNFA().isAcceptable(), false);
-        
+
         parser.getNFA().match("h".repeat(0));
         Assert.assertEquals(parser.getNFA().isAcceptable(), false);
 
@@ -844,7 +844,7 @@ public class RegexParser_Test {
 
         parser.getNFA().match("ddd");
         Assert.assertEquals(parser.getNFA().isAcceptable(), false);
-        
+
         parser.getNFA().match("8");
         Assert.assertEquals(parser.getNFA().isAcceptable(), true);
     }
@@ -863,7 +863,7 @@ public class RegexParser_Test {
 
         parser.getNFA().match("ccc");
         Assert.assertEquals(parser.getNFA().isAcceptable(), false);
-        
+
         parser.getNFA().match("8");
         Assert.assertEquals(parser.getNFA().isAcceptable(), true);
 
@@ -878,12 +878,55 @@ public class RegexParser_Test {
     }
 
     @Test
+    public void verbose_MultipleBracketsAndOperators4() {
+        setUserInput("(a+|b)(a*|c)");
+        RegexParser parser = new RegexParser();
+        parser.readRegEx();
+        parser.buildNFA();
+
+        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+
+        parser.getNFA().match("a");
+        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+
+        parser.getNFA().match("aaaaaa");
+        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+
+        parser.getNFA().match("c");
+        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+
+        parser.getNFA().match("b");
+        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+
+        // Reset nfa
+        parser.getNFA().initialize();
+
+        parser.getNFA().match("b");
+        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+
+        parser.getNFA().match("aaaaaaaaaaaaaaaaaaa");
+        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+
+        parser.getNFA().match("c");
+        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+
+        // Reset nfa
+        parser.getNFA().initialize();
+
+        parser.getNFA().match("bc");
+        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+
+        parser.getNFA().match("a");
+        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+    }
+
+    @Test
     public void verbose_emptyRegEx() {
         RegexParser parser = new RegexParser();
         parser.buildNFA();
 
         Assert.assertEquals(parser.getNFA().isAcceptable(), true);
-        
+
         parser.getNFA().match("");
         Assert.assertEquals(parser.getNFA().isAcceptable(), true);
 
