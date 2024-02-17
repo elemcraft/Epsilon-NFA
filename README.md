@@ -4,9 +4,9 @@
 JDK 11, Test code would be run using JUnit 4
 
 ## Commands
-* Compiled with: `javac RegexEngine.java`
-* Run with: `java RegexEngine`
-* Run with verbose mode: `java RegexEngine -v`
+* Compiled with: `javac RegexParser.java`
+* Run with: `java RegexParser`
+* Run with verbose mode: `java RegexParser -v`
 
 ## Code Outline
 1. Read in the regular expression
