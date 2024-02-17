@@ -658,11 +658,11 @@ public class RegexParser_Test {
         Assert.assertEquals(parser.getNFA().isAcceptable(), false);
 
         for (int i = 0; i < 9; i++) {
-            parser.getNFA().match(Integer.toString(i));
-            Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+            boolean acceptable = parser.getNFA().match(Integer.toString(i));
+            Assert.assertEquals(acceptable, false);
         }
-        parser.getNFA().match("9");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+        boolean acceptable = parser.getNFA().match("9");
+        Assert.assertEquals(acceptable, true);
     }
 
     @Test
@@ -675,11 +675,11 @@ public class RegexParser_Test {
         Assert.assertEquals(parser.getNFA().isAcceptable(), false);
 
         for (int i = 0; i < 25; i++) {
-            parser.getNFA().match(Character.toString(i + 'a'));
-            Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+            boolean acceptable = parser.getNFA().match(Character.toString(i + 'a'));
+            Assert.assertEquals(acceptable, false);
         }
-        parser.getNFA().match("z");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+        boolean acceptable = parser.getNFA().match("z");
+        Assert.assertEquals(acceptable, true);
     }
 
     @Test
@@ -692,8 +692,8 @@ public class RegexParser_Test {
         Assert.assertEquals(parser.getNFA().isAcceptable(), true);
 
         for (int i = 0; i < 100; i++) {
-            parser.getNFA().match("k".repeat(i));
-            Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+            boolean acceptable = parser.getNFA().match("k".repeat(i));
+            Assert.assertEquals(acceptable, true);
         }
     }
 
@@ -706,12 +706,12 @@ public class RegexParser_Test {
 
         Assert.assertEquals(parser.getNFA().isAcceptable(), false);
 
-        parser.getNFA().match("a");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+        boolean acceptable = parser.getNFA().match("a");
+        Assert.assertEquals(acceptable, true);
 
         for (int i = 0; i < 100; i++) {
-            parser.getNFA().match("b".repeat(i));
-            Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+            acceptable = parser.getNFA().match("b".repeat(i));
+            Assert.assertEquals(acceptable, true);
         }
     }
 
@@ -724,12 +724,12 @@ public class RegexParser_Test {
 
         Assert.assertEquals(parser.getNFA().isAcceptable(), false);
 
-        parser.getNFA().match("k".repeat(0));
-        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+        boolean acceptable = parser.getNFA().match("k".repeat(0));
+        Assert.assertEquals(acceptable, false);
 
         for (int i = 1; i < 100; i++) {
-            parser.getNFA().match("k".repeat(i));
-            Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+            acceptable = parser.getNFA().match("k".repeat(i));
+            Assert.assertEquals(acceptable, true);
         }
     }
 
@@ -742,15 +742,15 @@ public class RegexParser_Test {
 
         Assert.assertEquals(parser.getNFA().isAcceptable(), false);
 
-        parser.getNFA().match("f");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+        boolean acceptable = parser.getNFA().match("f");
+        Assert.assertEquals(acceptable, false);
 
-        parser.getNFA().match("h".repeat(0));
-        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+        acceptable = parser.getNFA().match("h".repeat(0));
+        Assert.assertEquals(acceptable, false);
 
         for (int i = 1; i < 100; i++) {
-            parser.getNFA().match("h".repeat(i));
-            Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+            acceptable = parser.getNFA().match("h".repeat(i));
+            Assert.assertEquals(acceptable, true);
         }
     }
 
@@ -763,27 +763,17 @@ public class RegexParser_Test {
 
         Assert.assertEquals(parser.getNFA().isAcceptable(), false);
 
-        parser.getNFA().match("a");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+        boolean acceptable = parser.getNFA().match("d");
+        Assert.assertEquals(acceptable, false);
 
-        parser.getNFA().match("b");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
-    }
+        acceptable = parser.getNFA().match("c");
+        Assert.assertEquals(acceptable, true);
 
-    @Test
-    public void verbose_SingleAlternation2() {
-        setUserInput("ab|dc");
-        RegexParser parser = new RegexParser();
-        parser.readRegEx();
-        parser.buildNFA();
+        // Reset nfa
+        parser.getNFA().initialize();
 
-        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
-
-        parser.getNFA().match("d");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
-
-        parser.getNFA().match("c");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+        acceptable = parser.getNFA().match("ab");
+        Assert.assertEquals(acceptable, true);
     }
 
     @Test
@@ -795,17 +785,17 @@ public class RegexParser_Test {
 
         Assert.assertEquals(parser.getNFA().isAcceptable(), false);
 
-        parser.getNFA().match("a");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+        boolean acceptable = parser.getNFA().match("a");
+        Assert.assertEquals(acceptable, false);
 
-        parser.getNFA().match("b");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+        acceptable = parser.getNFA().match("b");
+        Assert.assertEquals(acceptable, false);
 
-        parser.getNFA().match("c");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+        acceptable = parser.getNFA().match("c");
+        Assert.assertEquals(acceptable, true);
 
-        parser.getNFA().match("a");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+        acceptable = parser.getNFA().match("a");
+        Assert.assertEquals(acceptable, false);
     }
 
     @Test
@@ -817,17 +807,17 @@ public class RegexParser_Test {
 
         Assert.assertEquals(parser.getNFA().isAcceptable(), false);
 
-        parser.getNFA().match("s8");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+        boolean acceptable = parser.getNFA().match("s8");
+        Assert.assertEquals(acceptable, true);
 
-        parser.getNFA().match("wr");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+        acceptable = parser.getNFA().match("wr");
+        Assert.assertEquals(acceptable, true);
 
-        parser.getNFA().match("w");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+        acceptable = parser.getNFA().match("w");
+        Assert.assertEquals(acceptable, false);
 
-        parser.getNFA().match("r");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+        acceptable = parser.getNFA().match("r");
+        Assert.assertEquals(acceptable, true);
     }
 
     @Test
@@ -839,14 +829,14 @@ public class RegexParser_Test {
 
         Assert.assertEquals(parser.getNFA().isAcceptable(), false);
 
-        parser.getNFA().match("s");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+        boolean acceptable = parser.getNFA().match("s");
+        Assert.assertEquals(acceptable, false);
 
-        parser.getNFA().match("ddd");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+        acceptable = parser.getNFA().match("ddd");
+        Assert.assertEquals(acceptable, false);
 
-        parser.getNFA().match("8");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+        acceptable = parser.getNFA().match("8");
+        Assert.assertEquals(acceptable, true);
     }
 
     @Test
@@ -858,23 +848,23 @@ public class RegexParser_Test {
 
         Assert.assertEquals(parser.getNFA().isAcceptable(), false);
 
-        parser.getNFA().match("s");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+        boolean acceptable = parser.getNFA().match("s");
+        Assert.assertEquals(acceptable, false);
 
-        parser.getNFA().match("ccc");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+        acceptable = parser.getNFA().match("ccc");
+        Assert.assertEquals(acceptable, false);
 
-        parser.getNFA().match("8");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+        acceptable = parser.getNFA().match("8");
+        Assert.assertEquals(acceptable, true);
 
-        parser.getNFA().match("w");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+        acceptable = parser.getNFA().match("w");
+        Assert.assertEquals(acceptable, false);
 
-        parser.getNFA().match("r");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+        acceptable = parser.getNFA().match("r");
+        Assert.assertEquals(acceptable, true);
 
-        parser.getNFA().match("wr");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+        acceptable = parser.getNFA().match("wr");
+        Assert.assertEquals(acceptable, true);
     }
 
     @Test
@@ -886,38 +876,38 @@ public class RegexParser_Test {
 
         Assert.assertEquals(parser.getNFA().isAcceptable(), false);
 
-        parser.getNFA().match("a");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+        boolean acceptable = parser.getNFA().match("a");
+        Assert.assertEquals(acceptable, true);
 
-        parser.getNFA().match("aaaaaa");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+        acceptable = parser.getNFA().match("aaaaaa");
+        Assert.assertEquals(acceptable, true);
 
-        parser.getNFA().match("c");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+        acceptable = parser.getNFA().match("c");
+        Assert.assertEquals(acceptable, true);
 
-        parser.getNFA().match("b");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
-
-        // Reset nfa
-        parser.getNFA().initialize();
-
-        parser.getNFA().match("b");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
-
-        parser.getNFA().match("aaaaaaaaaaaaaaaaaaa");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
-
-        parser.getNFA().match("c");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+        acceptable = parser.getNFA().match("b");
+        Assert.assertEquals(acceptable, false);
 
         // Reset nfa
         parser.getNFA().initialize();
 
-        parser.getNFA().match("bc");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+        acceptable = parser.getNFA().match("b");
+        Assert.assertEquals(acceptable, true);
 
-        parser.getNFA().match("a");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+        acceptable = parser.getNFA().match("aaaaaaaaaaaaaaaaaaa");
+        Assert.assertEquals(acceptable, true);
+
+        acceptable = parser.getNFA().match("c");
+        Assert.assertEquals(acceptable, false);
+
+        // Reset nfa
+        parser.getNFA().initialize();
+
+        acceptable = parser.getNFA().match("bc");
+        Assert.assertEquals(acceptable, true);
+
+        acceptable = parser.getNFA().match("a");
+        Assert.assertEquals(acceptable, false);
     }
 
     @Test
@@ -927,16 +917,16 @@ public class RegexParser_Test {
 
         Assert.assertEquals(parser.getNFA().isAcceptable(), true);
 
-        parser.getNFA().match("");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), true);
+        boolean acceptable = parser.getNFA().match("");
+        Assert.assertEquals(acceptable, true);
 
-        parser.getNFA().match(" ");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+        acceptable = parser.getNFA().match(" ");
+        Assert.assertEquals(acceptable, false);
 
-        parser.getNFA().match("");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+        acceptable = parser.getNFA().match("");
+        Assert.assertEquals(acceptable, false);
 
-        parser.getNFA().match("a");
-        Assert.assertEquals(parser.getNFA().isAcceptable(), false);
+        acceptable = parser.getNFA().match("a");
+        Assert.assertEquals(acceptable, false);
     }
 }
