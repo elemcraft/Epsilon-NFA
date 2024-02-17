@@ -3,14 +3,9 @@ import java.util.*;
 public class NFA {
     private State start;
     private State end;
-
-    private int count; // total number of states
-    private Set<State> states;
     public Set<State> current; // The current states that this NFA is in
 
     public NFA(State start, State end) {
-        count = 0;
-        states = new HashSet<>();
         this.start = start;
         this.end = end;
         current = new HashSet<>();
@@ -188,31 +183,8 @@ public class NFA {
         return current.contains(end);
     }
 
-    public int labelStates() {
-        label(start);
-        return count;
-    }
-
-    // Depth first search to label every state in the nfa
-    // Helper method for labelStates()
-    private void label(State curr) {
-        // Check if the current state has been visited
-        if (curr == null || curr.id == -1) {
-            return;
-        }
-
-        curr.id = count;
-        count++;
-        states.add(curr);
-
-        // Explore neighboring states
-        label(curr.to.next);
-        for (State st : curr.epTo) {
-            label(st);
-        }
-    }
-
-    private void DFSLabel(State curr, List<Map<Character, List<State>>> table, Set<Character> symbols) {
+    // Depth first search to label every state in the NFA
+    private void label(State curr, List<Map<Character, List<State>>> table, Set<Character> symbols) {
         // Check if the current state has been visited
         if (curr.id != -1) {
             return;
@@ -226,19 +198,19 @@ public class NFA {
             symbols.add(curr.to.symbol);
             table.get(curr.id).put(curr.to.symbol, new ArrayList<>());
             table.get(curr.id).get(curr.to.symbol).add(curr.to.next);
-            DFSLabel(curr.to.next, table, symbols);
+            label(curr.to.next, table, symbols);
         } else if (!curr.epTo.isEmpty()) {
             table.get(curr.id).put('ε', curr.epTo);
             for (State neighbor : curr.epTo) {
-                DFSLabel(neighbor, table, symbols);
+                label(neighbor, table, symbols);
             }
         }
     }
 
-    // Traverse the nfa to construct transition table
+    // Traverse the NFA to construct transition table
     private List<Map<Character, List<State>>> buildTable(Set<Character> symbols) {
         List<Map<Character, List<State>>> table = new ArrayList<>();
-        DFSLabel(start, table, symbols);
+        label(start, table, symbols);
         return table;
     }
 
