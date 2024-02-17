@@ -61,5 +61,12 @@ A regular expression can consist of
 ## Verbose Mode Example: Regular Expression = $(a^+|b)(a^*|c)$
 <img width="500" alt="image" src="https://github.com/elemcraft/Epsilon-NFA/assets/48006644/d1453ab6-b957-46b2-a1e1-a9ed995ce477">
 
+### Example Diagram:
+1. Omit epsilon transition symbol for simplicity
+2. Turn symbol transition red for readability
+<p align="center">
+   <img width="1200" alt="image" src="https://github.com/elemcraft/Epsilon-NFA/assets/48006644/ff8eb147-cf7f-4c6b-928a-7793ebf833ad">
+</p>
+
 ## Future Improvement
 Currently, the ε-NFA interprets '.' character as the concatenation symbol. Hence, any input containing the dot character, the character would be interpreted as concatenation. Adding the function to take the dot symbol with the escape symbol can solve this problem.
