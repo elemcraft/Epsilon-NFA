@@ -212,40 +212,33 @@ public class RegexParser {
     public static void main(String[] args) {
         RegexParser parser = new RegexParser();
         parser.readRegEx(); // Read in an regular expression
+        parser.buildNFA();
+        final boolean verbose = isVerboseMode(args);
 
-        if (isVerboseMode(args)) { // verbose mode
-            parser.buildNFA();
-            
-            // Print transition table
+        // Print transition table
+        if (verbose) {
             parser.nfa.labelStates();
             List<Character> symbols = parser.getRegexSymbols();
             parser.nfa.printTransitionTable(symbols);
+        }
 
-            System.out.println("Ready");
-            System.out.println(parser.nfa.accepting());
+        System.out.println("Ready");
 
-            // Repeatly checking input character by character
-            while (true) {
-                String input = parser.userInput.nextLine();
-                if (input.length() == 0) {
-                    System.out.println(parser.nfa.accepting());
-                    continue;
-                }
+        // If in verbose mode, Print if the nfa accepts the initial state
+        if (verbose) {
+            System.out.println(parser.nfa.isAcceptable());
+        }
 
-                char symbol = input.charAt(0);
-                parser.nfa.matchSymbol(symbol);
-                System.out.println(parser.nfa.accepting());
+        // Repeatly checking input
+        while (true) {
+            // Reset the nfa before every input if not in verbose mode
+            if(!verbose) {
+                parser.nfa.initializeNFA();
             }
-        } else { // normal mode
-            parser.buildNFA();
-            System.out.println("Ready");
 
-            // Repeatly checking input
-            while (true) {
-                String input = parser.userInput.nextLine();
-                boolean result = parser.nfa.match(input);
-                System.out.println(result);
-            }
+            String input = parser.userInput.nextLine();
+            boolean acceptable = parser.nfa.match(input);
+            System.out.println(acceptable);
         }
     }
 }

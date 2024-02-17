@@ -125,8 +125,8 @@ public class NFA {
         return blocks.pop();
     }
 
-    // Get the epsilon closure of the start state and store them in the current
-    // states
+    // Get the epsilon closure of the start state 
+    // and store them in the current field
     public void initializeNFA() {
         current.clear();
         current.add(start);
@@ -161,13 +161,11 @@ public class NFA {
 
     // Traverse the nfa to see if the input word matches the regular expression
     public boolean match(String word) {
-        initializeNFA();
-
         for (char symbol : word.toCharArray()) {
             matchSymbol(symbol);
         }
 
-        return accepting();
+        return isAcceptable();
     }
 
     // Update the current states for the input symbol
@@ -184,8 +182,8 @@ public class NFA {
         current = getEpClosure(next);
     }
 
-    // Check if current states are accepting states
-    public boolean accepting() {
+    // Check if current states are acceptable
+    public boolean isAcceptable() {
         return current.contains(end);
     }
 
@@ -215,7 +213,7 @@ public class NFA {
     // Construct transition table
     private String[][] buildTable(List<Character> symbols) {
         String[][] table = new String[count][symbols.size() + 1]; // add one for the epsilon column
-        for (String[] row : table) {
+        for (String[] row : table) { // initialize every entry to be an empty string
             Arrays.fill(row, new String());
         }
 
