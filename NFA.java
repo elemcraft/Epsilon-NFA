@@ -191,16 +191,16 @@ public class NFA {
         }
 
         curr.id = table.size();
-        table.add(new HashMap<>());
+        Map<Character, List<State>> neighbors = new HashMap<>(); // The neighbor list for current state
+        table.add(neighbors);
 
         // Explore neighboring states
         if (curr.to.next != null) {
             symbols.add(curr.to.symbol);
-            table.get(curr.id).put(curr.to.symbol, new ArrayList<>());
-            table.get(curr.id).get(curr.to.symbol).add(curr.to.next);
+            neighbors.put(curr.to.symbol, Arrays.asList(curr.to.next));
             label(curr.to.next, table, symbols);
         } else if (!curr.epTo.isEmpty()) {
-            table.get(curr.id).put('ε', curr.epTo);
+            neighbors.put('ε', curr.epTo);
             for (State neighbor : curr.epTo) {
                 label(neighbor, table, symbols);
             }
@@ -209,6 +209,11 @@ public class NFA {
 
     // Traverse the NFA to construct transition table
     private List<Map<Character, List<State>>> buildTable(Set<Character> symbols) {
+        // In table, 
+        // each entry stores the neighbor list of the state whose id is the same as entry index
+        // the neighbor list are hashmaps
+        // key is the symbol required to transit to neighbors
+        // value is the neighbor state list
         List<Map<Character, List<State>>> table = new ArrayList<>();
         label(start, table, symbols);
         return table;
