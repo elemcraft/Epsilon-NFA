@@ -15,19 +15,19 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         boolean output = parser.getNFA().match("ko;2 q46");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("ko;2q46");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("ko2 q46");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("ko2q46");
         Assert.assertEquals(output, false);
     }
@@ -37,23 +37,23 @@ public class RegexParser_Test {
         RegexParser parser = new RegexParser();
         parser.buildNFA();
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         boolean output = parser.getNFA().match("");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("a");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("*");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("|");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("+");
         Assert.assertEquals(output, false);
     }
@@ -65,19 +65,19 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         boolean output = parser.getNFA().match("jsh*fq");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("jsfq");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("jshfq");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("jshhhhhfq");
         Assert.assertEquals(output, true);
     }
@@ -89,15 +89,15 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         boolean output = parser.getNFA().match("jsfq");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("jshfq");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("jshhhhhfq");
         Assert.assertEquals(output, true);
     }
@@ -109,19 +109,19 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         boolean output = parser.getNFA().match("kofw");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("ew");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("kofwew");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("kofw|ew");
         Assert.assertEquals(output, false);
     }
@@ -133,15 +133,15 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         boolean output = parser.getNFA().match("(sbv)oi15");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("sbvoi15");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("");
         Assert.assertEquals(output, false);
     }
@@ -153,19 +153,19 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         boolean output = parser.getNFA().match("62ewqr*fs");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("62*ewqrfs");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("6ewqfs");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("62222ewqrrrfs");
         Assert.assertEquals(output, true);
     }
@@ -177,23 +177,23 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         boolean output = parser.getNFA().match("gq;mi29+wnr");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("gq;+mi29wnr");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("gqmi29wnr");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("gq;mi2wnr");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("gq;;;mi2999999wnr");
         Assert.assertEquals(output, true);
     }
@@ -205,23 +205,23 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         boolean output = parser.getNFA().match("vqr|89r|bj,");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("vqr");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("89r");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("bj,");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("vqr89rbj,");
         Assert.assertEquals(output, false);
     }
@@ -233,19 +233,19 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         boolean output = parser.getNFA().match("(,rukw35)gtr(ehrw;[])");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("(,rukw35)gtrehrw;[]");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match(",rukw35gtr(ehrw;[])");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match(",rukw35gtrehrw;[]");
         Assert.assertEquals(output, true);
     }
@@ -257,23 +257,23 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         boolean output = parser.getNFA().match("tq4(jpl5'7)*vr3");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("tq4jpl5'7*vr3");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("tq4vr3");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("tq4jpl5'7vr3");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("tq4jpl5'7jpl5'7jpl5'7vr3");
         Assert.assertEquals(output, true);
     }
@@ -285,27 +285,27 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         boolean output = parser.getNFA().match("oq(ij2;_)+24");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("oqij2;_+24");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("oq(ij2;_)24");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("oq24");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("oqij2;_24");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("oqij2;_ij2;_ij2;_24");
         Assert.assertEquals(output, true);
     }
@@ -317,31 +317,31 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         boolean output = parser.getNFA().match("t(gt4w|ok)two");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("tgt4w|oktwo");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("t(gt4wok)two");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("tgt4woktwo");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("tgt4wtwo");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("toktwo");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("ttwo");
         Assert.assertEquals(output, false);
     }
@@ -353,55 +353,55 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         boolean output = parser.getNFA().match("qh+3|gw*");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("qh+3gw*");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("qh3|gw*");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("qh+3|gw");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("qh3gw");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("qh+3");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("gw*");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("q3");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("g");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("qh3");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("gw");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("qhhhhhh3");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("gwwwwww");
         Assert.assertEquals(output, true);
     }
@@ -413,39 +413,39 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         boolean output = parser.getNFA().match("(h*|p)(h|d)");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("d");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("h");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("hhd");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("ph");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("pd");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("hph");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("phd");
         Assert.assertEquals(output, false);
     }
@@ -457,67 +457,67 @@ public class RegexParser_Test {
         parser.readRegEx();
         parser.buildNFA();
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         boolean output = parser.getNFA().match("(t*|f)+r(k|y)");
         Assert.assertEquals(output, false);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("ttt");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("fffff");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("tff");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("rrr");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("kkkk");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("yy");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("ty");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("try");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("rrry");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("fry");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("rk");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("trk");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("tk");
         Assert.assertEquals(output, true);
 
-        parser.getNFA().initializeNFA();
+        parser.getNFA().initialize();
         output = parser.getNFA().match("ky");
         Assert.assertEquals(output, true);
     }

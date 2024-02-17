@@ -23,7 +23,7 @@ public class RegexParser {
     // Behaves like setter for the "machine" field
     public void buildNFA() {
         nfa = NFA.buildMachine(regEx);
-        nfa.initializeNFA();
+        nfa.initialize();
     }
 
     // Behaves like setter for the "regEx" field
@@ -80,7 +80,6 @@ public class RegexParser {
             }
 
             // Two consecutive kleene star or kleene plus
-
             if ((curr == '*' || curr == '+') && (prev == '*' || prev == '+')) {
                 return false;
             }
@@ -191,20 +190,6 @@ public class RegexParser {
         return output;
     }
 
-    private List<Character> getRegexSymbols() {
-        Set<Character> symbols = new HashSet<>();
-        for (char curr : regEx.toCharArray()) {
-            // Add curr character to the symbols set if it is not an operator
-            if (curr != '|' && curr != '*' && curr != '+' && curr != '.') {
-                symbols.add(curr);
-            }
-        }
-
-        List<Character> res = new ArrayList<>(symbols);
-        Collections.sort(res);
-        return res;
-    }
-
     private static boolean isVerboseMode(String[] args) {
         return args.length > 0 && args[0].equals("-v");
     }
@@ -217,9 +202,7 @@ public class RegexParser {
 
         // Print transition table
         if (verbose) {
-            parser.nfa.labelStates();
-            List<Character> symbols = parser.getRegexSymbols();
-            parser.nfa.printTransitionTable(symbols);
+            parser.nfa.printTable();
         }
 
         System.out.println("Ready");
@@ -232,8 +215,8 @@ public class RegexParser {
         // Repeatly checking input
         while (true) {
             // Reset the nfa before every input if not in verbose mode
-            if(!verbose) {
-                parser.nfa.initializeNFA();
+            if (!verbose) {
+                parser.nfa.initialize();
             }
 
             String input = parser.userInput.nextLine();

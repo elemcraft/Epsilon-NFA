@@ -125,9 +125,9 @@ public class NFA {
         return blocks.pop();
     }
 
-    // Get the epsilon closure of the start state 
+    // Get the epsilon closure of the start state
     // and store them in the current field
-    public void initializeNFA() {
+    public void initialize() {
         current.clear();
         current.add(start);
         current = getEpClosure(current);
@@ -139,23 +139,24 @@ public class NFA {
 
         // Perform dfs from every state in the current state set
         for (State state : states) {
-            dfs(state, epClosure);
+            epsilonDFS(state, epClosure);
         }
 
         return epClosure;
     }
 
     // Depth first search from current state to get the epsilon closure
+    // Only consider epislon transitions
     // Helper method for getEpClosure()
-    private static void dfs(State curr, Set<State> visited) {
+    private static void epsilonDFS(State curr, Set<State> visited) {
         if (visited.contains(curr)) {
             return;
         }
 
         visited.add(curr);
 
-        for (State neighbor : curr.epsilonTo) {
-            dfs(neighbor, visited);
+        for (State neighbor : curr.epTo) {
+            epsilonDFS(neighbor, visited);
         }
     }
 
@@ -169,7 +170,7 @@ public class NFA {
     }
 
     // Update the current states for the input symbol
-    public void matchSymbol(char symbol) {
+    private void matchSymbol(char symbol) {
         Set<State> next = new HashSet<>();
 
         for (State state : current) {
@@ -191,92 +192,109 @@ public class NFA {
         label(start);
         return count;
     }
-    
+
+    // Depth first search to label every state in the nfa
     // Helper method for labelStates()
     private void label(State curr) {
         // Check if the current state has been visited
-        if (curr == null || states.contains(curr)) {
+        if (curr == null || curr.id == -1) {
             return;
         }
 
-        curr.index = count;
+        curr.id = count;
         count++;
         states.add(curr);
 
         // Explore neighboring states
         label(curr.to.next);
-        for (State st : curr.epsilonTo) {
+        for (State st : curr.epTo) {
             label(st);
         }
     }
 
-    // Construct transition table
-    private String[][] buildTable(List<Character> symbols) {
-        String[][] table = new String[count][symbols.size() + 1]; // add one for the epsilon column
-        for (String[] row : table) { // initialize every entry to be an empty string
-            Arrays.fill(row, new String());
+    private void DFSLabel(State curr, List<Map<Character, List<State>>> table, Set<Character> symbols) {
+        // Check if the current state has been visited
+        if (curr.id != -1) {
+            return;
         }
 
-        for (State st : states) {
-            // epsilon transitions
-            for (State epTrans : st.epsilonTo) {
-                if (table[st.index][0].length() != 0)
-                    table[st.index][0] += ",";
-                table[st.index][0] += epTrans.toString();
-            }
+        curr.id = table.size();
+        table.add(new HashMap<>());
 
-            // symbol transition
-            if (st.to.symbol != Character.MIN_VALUE) {
-                if (table[st.index][symbols.indexOf(st.to.symbol) + 1].length() != 0) {
-                    table[st.index][symbols.indexOf(st.to.symbol) + 1] += ",";
-                }
-                table[st.index][symbols.indexOf(st.to.symbol) + 1] += st.to.next.toString();
+        // Explore neighboring states
+        if (curr.to.next != null) {
+            symbols.add(curr.to.symbol);
+            table.get(curr.id).put(curr.to.symbol, new ArrayList<>());
+            table.get(curr.id).get(curr.to.symbol).add(curr.to.next);
+            DFSLabel(curr.to.next, table, symbols);
+        } else if (!curr.epTo.isEmpty()) {
+            table.get(curr.id).put('ε', curr.epTo);
+            for (State neighbor : curr.epTo) {
+                DFSLabel(neighbor, table, symbols);
             }
         }
+    }
 
+    // Traverse the nfa to construct transition table
+    private List<Map<Character, List<State>>> buildTable(Set<Character> symbols) {
+        List<Map<Character, List<State>>> table = new ArrayList<>();
+        DFSLabel(start, table, symbols);
         return table;
     }
 
-    public void printTransitionTable(List<Character> symbols) {
-        String[][] table = buildTable(symbols);
+    // Print the transition table
+    public void printTable() {
+        Set<Character> symbols = new HashSet<>(); // Store all the symbols in the regEx
+        List<Map<Character, List<State>>> table = buildTable(symbols);
 
-        // find the max length of all the strings
-        int maxLength = "Epsilon".length();
-        for (String[] row : table) {
-            for (String str : row) {
-                if (str.length() > maxLength)
-                    maxLength = str.length();
-            }
-        }
-        String format = "%" + maxLength + "s";
-        String separator = " | ";
+        final String format = "%8s";
+        final String separator = " | ";
 
         // Print header row
-        System.out.print("    " + separator);
+        System.out.print(String.format(format, "") + separator); // Print header row title
         System.out.print(String.format(format, "Epsilon") + separator);
         for (char sym : symbols) {
             System.out.print(String.format(format, Character.toString(sym)));
             System.out.print(separator);
         }
-        System.out.println();
+        System.out.println(); // Change line
 
-        // for each loop print a row
-        for (int row = 0; row < table.length; row++) {
-            String counterStr = new String();
-            if (row == start.index) { // Mark start state
-                counterStr = String.format("%7s", ">q" + row + separator);
-            } else if (row == end.index) { // Mark final state
-                counterStr = String.format("%7s", "*q" + row + separator);
-            } else {
-                counterStr = String.format("%7s", "q" + row + separator);
+        // Each loop print a row
+        for (int curr = 0; curr < table.size(); curr++) {
+            // Print the title of current row
+            String title = "q" + curr;
+            if (curr == start.id) { // Mark start state with '>' symbol
+                title = ">" + title;
+            } else if (curr == end.id) { // Mark final state with '*' symbol
+                title = "*" + title;
             }
-            System.out.print(counterStr);
+            title = String.format(format, title);
+            System.out.print(title + separator);
 
-            for (String str : table[row]) {
-                str = String.format(format, str);
-                System.out.print(str + separator);
+            // Print epsilon column
+            List<State> epNeighbor = table.get(curr).get('ε');
+            String epEntry = new String();
+            if (epNeighbor != null) {
+                epEntry = epNeighbor.toString();
+                // Delete the list brackets
+                epEntry = epEntry.substring(1, epEntry.length() - 1);
             }
-            System.out.println("");
+            epEntry = String.format(format, epEntry);
+            System.out.print(epEntry + separator);
+
+            // Print the content of current row
+            for (char sym : symbols) {
+                List<State> neighbor = table.get(curr).get(sym);
+                String entry = new String();
+                if (neighbor != null) {
+                    entry = neighbor.toString();
+                    // Delete the list brackets
+                    entry = entry.substring(1, entry.length() - 1);
+                }
+                entry = String.format(format, entry);
+                System.out.print(entry + separator);
+            }
+            System.out.println(); // Change line
         }
     }
 }
