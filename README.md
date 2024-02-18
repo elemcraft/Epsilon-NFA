@@ -74,4 +74,4 @@ A regular expression can consist of
 [Denis Kyashif's Blog](https://deniskyashif.com/2019/02/17/implementing-a-regular-expression-engine/)
 
 ## Future Improvement
-Currently, the ε-NFA interprets '.' character as the concatenation symbol. Hence, any input containing the dot character, the character would be interpreted as concatenation. Adding the function to take the dot symbol with the escape symbol can solve this problem.
+Currently, the ε-NFA interprets `.` character as the concatenation symbol. Hence, any input containing the dot character, the character would be interpreted as concatenation. Adding the function to take the dot symbol with the escape symbol can solve this problem.
