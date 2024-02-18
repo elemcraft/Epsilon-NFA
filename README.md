@@ -30,7 +30,7 @@
    <img width="700" alt="image" src="https://github.com/elemcraft/Epsilon-NFA/assets/48006644/295e2e05-0969-4464-a2a8-15bac7e45053">
 </p>
 
-### 3. Union Block: $R = S | T$
+### 3. Union Block: $R = S\mid T$
 <p align="center">
    <img width="700" alt="image" src="https://github.com/elemcraft/Epsilon-NFA/assets/48006644/32a47df0-5375-4e6d-a54f-e75bc607f7f2">
 </p>
@@ -55,11 +55,11 @@ A regular expression can consist of
 1. Symbols: lowercase and uppercase letters, numbers, spaces,
 2. Operators: the alternation operator `|`, the Kleene star `*` and Kleene plus operators `+`, as well as brackets `(` and `)`
 
-## Example: Regular Expression = $(a^+|b)(a^*|c)$
+## Example: Regular Expression = $(a^+\mid b)(a^*\mid c)$
 * After entering the regular expression, repeatly match input strings against regular expression
 <img width="500" alt="image" src="https://github.com/elemcraft/Epsilon-NFA/assets/48006644/82e52c7e-29bf-4e97-b595-5f23c45dcb62">
 
-## Verbose Mode Example: Regular Expression = $(a^+|b)(a^*|c)$
+## Verbose Mode Example: Regular Expression = $(a^+\mid b)(a^*\mid c)$
 * The major feature for verbose mode is that NFA will not reset for every input string or character. Thus, each input starts from the current states instead of the initial states of NFA. In addition, verbose mode also prints out the transition table. In the transition table, the start state is marked with `>` symbol, and the final state is marked with `*` symbol
 <img width="500" alt="image" src="https://github.com/elemcraft/Epsilon-NFA/assets/48006644/d1453ab6-b957-46b2-a1e1-a9ed995ce477">
 
