@@ -9,7 +9,7 @@
 * Run with: `java RegexParser`
 * Run with verbose mode: `java RegexParser -v`
 
-## Code Outline
+## Outline
 1. Read in the regular expression
 2. Check the validity of the input regular expression and throw an exception if the regular expression is invalid
 3. Transform the regular expression from infix to postfix
