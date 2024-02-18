@@ -15,7 +15,7 @@ public class NFA {
     private static NFA epNFA() {
         State start = new State(false);
         State end = new State(true);
-        State.addEpsilonTransition(start, end);
+        State.addEpTo(start, end);
 
         return new NFA(start, end);
     }
@@ -24,14 +24,14 @@ public class NFA {
     private static NFA symbolNFA(char symbol) {
         State start = new State(false);
         State end = new State(true);
-        State.addTransition(start, end, symbol);
+        State.addTo(start, end, symbol);
 
         return new NFA(start, end);
     }
 
     // Building block: concatenation
     private static NFA concat(NFA first, NFA second) {
-        State.addEpsilonTransition(first.end, second.start);
+        State.addEpTo(first.end, second.start);
         first.end.isFinal = false;
 
         return new NFA(first.start, second.end);
@@ -40,13 +40,13 @@ public class NFA {
     // Building block: union(alternation)
     private static NFA union(NFA first, NFA second) {
         State start = new State(false);
-        State.addEpsilonTransition(start, first.start);
-        State.addEpsilonTransition(start, second.start);
+        State.addEpTo(start, first.start);
+        State.addEpTo(start, second.start);
 
         State end = new State(true);
-        State.addEpsilonTransition(first.end, end);
+        State.addEpTo(first.end, end);
         first.end.isFinal = false;
-        State.addEpsilonTransition(second.end, end);
+        State.addEpTo(second.end, end);
         second.end.isFinal = false;
 
         return new NFA(start, end);
@@ -57,11 +57,11 @@ public class NFA {
         State start = new State(false);
         State end = new State(true);
 
-        State.addEpsilonTransition(start, end);
-        State.addEpsilonTransition(start, nfa.start);
+        State.addEpTo(start, end);
+        State.addEpTo(start, nfa.start);
 
-        State.addEpsilonTransition(nfa.end, end);
-        State.addEpsilonTransition(nfa.end, nfa.start);
+        State.addEpTo(nfa.end, end);
+        State.addEpTo(nfa.end, nfa.start);
         nfa.end.isFinal = false;
 
         return new NFA(start, end);
@@ -72,9 +72,9 @@ public class NFA {
         State start = new State(false);
         State end = new State(true);
 
-        State.addEpsilonTransition(start, nfa.start);
-        State.addEpsilonTransition(nfa.end, end);
-        State.addEpsilonTransition(nfa.end, nfa.start);
+        State.addEpTo(start, nfa.start);
+        State.addEpTo(nfa.end, end);
+        State.addEpTo(nfa.end, nfa.start);
         nfa.end.isFinal = false;
 
         return new NFA(start, end);

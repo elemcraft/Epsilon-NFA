@@ -22,7 +22,7 @@ public class RegexParser {
 
     // Behaves like setter for the "machine" field
     public void buildNFA() {
-        nfa = NFA.buildMachine(regEx);
+        nfa = NFA.buildAutomaton(regEx);
         nfa.initialize();
     }
 

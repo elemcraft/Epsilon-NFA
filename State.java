@@ -18,11 +18,13 @@ public class State {
         epTo = new ArrayList<>();
     }
 
-    public static void addEpsilonTransition(State from, State to) {
+    // Add an epsilon transition
+    public static void addEpTo(State from, State to) {
         from.epTo.add(to);
     }
 
-    public static void addTransition(State from, State to, char symbol) {
+    // Add a symbol transition
+    public static void addTo(State from, State to, char symbol) {
         from.to = new Transition(symbol, to);
     }
 
