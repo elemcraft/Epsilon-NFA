@@ -9,6 +9,12 @@
 * Run with: `java RegexParser`
 * Run with verbose mode: `java RegexParser -v`
 
+## Features
+* Implement an epsilon non-deterministic finite state automaton (ε-NFA) as the core component of the regular expression parser. Allowing transitions without consuming any input symbols enables the automaton to be in multiple states at any moment, thus allowing the automaton to recognize patterns with varying lengths and symbols.
+* Utilize depth first search algorithm to retrieve all states within the epsilon closure of the current state.
+* Apply depth first search algorithm to construct the transition table for the input regular expression.
+* Incorporate stack-based checking to verify balanced brackets within the input regular expression. This parser utilize an integer variable to track the number of left brackets awaiting corresponding right brackets.
+
 ## Outline
 1. Read in the regular expression
 2. Check the validity of the input regular expression and throw an exception if the regular expression is invalid
